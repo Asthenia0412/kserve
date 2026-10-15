@@ -38,6 +38,53 @@ import (
 	"github.com/kserve/kserve/pkg/apis/serving/v1alpha2"
 )
 
+// Hub stubs for conversion tests. The real Hub lives in pkg/apis/serving/v1beta1,
+// which we can't import here (cycle via v1beta1/configmap.go → v1alpha1.KernelCachePath).
+// These structs share the same JSON shape as v1beta1's types, so our JSON-identity
+// conversion in ConvertTo/ConvertFrom works perfectly with them.
+
+// testHubLLM wraps the v1alpha2-shaped struct and implements conversion.Hub + runtime.Object.
+// We use a struct-with-embedded-struct so field access is lifted; constructor below
+// handles the struct-literal initialization problem.
+type testHubLLM struct {
+	v1alpha2.LLMInferenceService
+}
+
+func (*testHubLLM) Hub() {}
+
+func (t *testHubLLM) DeepCopyObject() runtime.Object {
+	if t == nil {
+		return nil
+	}
+	cp := t.LLMInferenceService.DeepCopy()
+	return &testHubLLM{LLMInferenceService: *cp}
+}
+
+// newTestHubLLM wraps a v1alpha2 literal into the Hub stub for struct-literal test setup.
+func newTestHubLLM(v *v1alpha2.LLMInferenceService) *testHubLLM {
+	return &testHubLLM{LLMInferenceService: *v}
+}
+
+// testHubLLMConfig is the Hub stub for LLMInferenceServiceConfig conversion tests.
+type testHubLLMConfig struct {
+	v1alpha2.LLMInferenceServiceConfig
+}
+
+func (*testHubLLMConfig) Hub() {}
+
+func (t *testHubLLMConfig) DeepCopyObject() runtime.Object {
+	if t == nil {
+		return nil
+	}
+	cp := t.LLMInferenceServiceConfig.DeepCopy()
+	return &testHubLLMConfig{LLMInferenceServiceConfig: *cp}
+}
+
+// newTestHubLLMConfig wraps a v1alpha2 LLMInferenceServiceConfig literal into the Hub stub.
+func newTestHubLLMConfig(v *v1alpha2.LLMInferenceServiceConfig) *testHubLLMConfig {
+	return &testHubLLMConfig{LLMInferenceServiceConfig: *v}
+}
+
 func TestLLMInferenceServiceConversion_PreservesCriticality(t *testing.T) {
 	criticality := Critical
 	modelName := "test-model"
@@ -57,7 +104,7 @@ func TestLLMInferenceServiceConversion_PreservesCriticality(t *testing.T) {
 	}
 
 	// Convert to v1alpha2 (hub)
-	dst := &v1alpha2.LLMInferenceService{}
+	dst := newTestHubLLM(&v1alpha2.LLMInferenceService{})
 	err := src.ConvertTo(dst)
 	require.NoError(t, err)
 
@@ -116,7 +163,7 @@ func TestLLMInferenceServiceConversion_PreservesLoRACriticalities(t *testing.T) 
 	}
 
 	// Convert to v1alpha2 (hub)
-	dst := &v1alpha2.LLMInferenceService{}
+	dst := newTestHubLLM(&v1alpha2.LLMInferenceService{})
 	err := src.ConvertTo(dst)
 	require.NoError(t, err)
 
@@ -167,7 +214,7 @@ func TestLLMInferenceServiceConversion_NoCriticality(t *testing.T) {
 	}
 
 	// Convert to v1alpha2 (hub)
-	dst := &v1alpha2.LLMInferenceService{}
+	dst := newTestHubLLM(&v1alpha2.LLMInferenceService{})
 	err := src.ConvertTo(dst)
 	require.NoError(t, err)
 
@@ -205,7 +252,7 @@ func TestLLMInferenceServiceConfigConversion_PreservesCriticality(t *testing.T) 
 	}
 
 	// Convert to v1alpha2 (hub)
-	dst := &v1alpha2.LLMInferenceServiceConfig{}
+	dst := newTestHubLLMConfig(&v1alpha2.LLMInferenceServiceConfig{})
 	err := src.ConvertTo(dst)
 	require.NoError(t, err)
 
@@ -246,7 +293,7 @@ func TestLLMInferenceServiceConversion_PreservesExistingAnnotations(t *testing.T
 	}
 
 	// Convert to v1alpha2 (hub)
-	dst := &v1alpha2.LLMInferenceService{}
+	dst := newTestHubLLM(&v1alpha2.LLMInferenceService{})
 	err := src.ConvertTo(dst)
 	require.NoError(t, err)
 
@@ -312,7 +359,7 @@ func TestLLMInferenceServiceConversion_PreservesInferencePoolSpec(t *testing.T) 
 	}
 
 	// Convert to v1alpha2 (hub)
-	dst := &v1alpha2.LLMInferenceService{}
+	dst := newTestHubLLM(&v1alpha2.LLMInferenceService{})
 	err := src.ConvertTo(dst)
 	require.NoError(t, err)
 
@@ -371,7 +418,7 @@ func TestLLMInferenceServiceConversion_PreservesPoolRef(t *testing.T) {
 	}
 
 	// Convert to v1alpha2 (hub)
-	dst := &v1alpha2.LLMInferenceService{}
+	dst := newTestHubLLM(&v1alpha2.LLMInferenceService{})
 	err := src.ConvertTo(dst)
 	require.NoError(t, err)
 
@@ -437,7 +484,7 @@ func TestLLMInferenceServiceConversion_PreservesSchedulerConfig(t *testing.T) {
 			}
 
 			// Convert to v1alpha2 (hub)
-			dst := &v1alpha2.LLMInferenceService{}
+			dst := newTestHubLLM(&v1alpha2.LLMInferenceService{})
 			err := src.ConvertTo(dst)
 			require.NoError(t, err)
 
@@ -514,7 +561,7 @@ func TestLLMInferenceServiceConversion_ScalingSpecWithDirectKEDA(t *testing.T) {
 		},
 	}
 
-	dst := &v1alpha2.LLMInferenceService{}
+	dst := newTestHubLLM(&v1alpha2.LLMInferenceService{})
 	err := src.ConvertTo(dst)
 	require.NoError(t, err)
 
@@ -578,7 +625,7 @@ func TestLLMInferenceServiceConversion_ScalingSpecWithWVA(t *testing.T) {
 		},
 	}
 
-	dst := &v1alpha2.LLMInferenceService{}
+	dst := newTestHubLLM(&v1alpha2.LLMInferenceService{})
 	require.NoError(t, src.ConvertTo(dst))
 
 	restored := &LLMInferenceService{}
@@ -612,7 +659,7 @@ func TestLLMInferenceServiceConversion_NilScalingSpec(t *testing.T) {
 	}
 
 	// Convert to v1alpha2 (hub)
-	dst := &v1alpha2.LLMInferenceService{}
+	dst := newTestHubLLM(&v1alpha2.LLMInferenceService{})
 	err := src.ConvertTo(dst)
 	require.NoError(t, err)
 
@@ -659,7 +706,7 @@ func TestLLMInferenceServiceConversion_PreservesLoRASpecFields(t *testing.T) {
 	}
 
 	// Convert to v1alpha2 (hub)
-	dst := &v1alpha2.LLMInferenceService{}
+	dst := newTestHubLLM(&v1alpha2.LLMInferenceService{})
 	err := src.ConvertTo(dst)
 	require.NoError(t, err)
 
@@ -714,7 +761,7 @@ func TestLLMInferenceServiceConversion_StatusRoundtrip_V1Alpha1ToV1Alpha2(t *tes
 	}
 
 	// v1alpha1 -> v1alpha2
-	hub := &v1alpha2.LLMInferenceService{}
+	hub := newTestHubLLM(&v1alpha2.LLMInferenceService{})
 	require.NoError(t, src.ConvertTo(hub))
 
 	assert.Equal(t, src.Status.URL.String(), hub.Status.URL.String())
@@ -765,7 +812,7 @@ func TestLLMInferenceServiceConversion_NilLoRASpecFields(t *testing.T) {
 	}
 
 	// Convert to v1alpha2 (hub)
-	dst := &v1alpha2.LLMInferenceService{}
+	dst := newTestHubLLM(&v1alpha2.LLMInferenceService{})
 	err := src.ConvertTo(dst)
 	require.NoError(t, err)
 
@@ -793,7 +840,7 @@ func TestLLMInferenceServiceConversion_StatusRoundtrip_V1Alpha2ToV1Alpha1(t *tes
 
 	addressSingular := &duckv1.Addressable{URL: externalURL}
 
-	hub := &v1alpha2.LLMInferenceService{
+	hub := newTestHubLLM(&v1alpha2.LLMInferenceService{
 		ObjectMeta: metav1.ObjectMeta{Name: "test", Namespace: "default"},
 		Spec:       v1alpha2.LLMInferenceServiceSpec{Model: v1alpha2.LLMModelSpec{URI: *apis.HTTPS("example.com")}},
 		Status: v1alpha2.LLMInferenceServiceStatus{
@@ -814,7 +861,7 @@ func TestLLMInferenceServiceConversion_StatusRoundtrip_V1Alpha2ToV1Alpha1(t *tes
 				},
 			},
 		},
-	}
+	})
 
 	// v1alpha2 -> v1alpha1
 	spoke := &LLMInferenceService{}
@@ -828,7 +875,7 @@ func TestLLMInferenceServiceConversion_StatusRoundtrip_V1Alpha2ToV1Alpha1(t *tes
 	assert.Equal(t, "https://example.com/ns/m", spoke.Status.Addresses[0].URL.String())
 
 	// v1alpha1 -> v1alpha2 (roundtrip) - Origin is lost
-	restored := &v1alpha2.LLMInferenceService{}
+	restored := newTestHubLLM(&v1alpha2.LLMInferenceService{})
 	require.NoError(t, spoke.ConvertTo(restored))
 
 	assert.Equal(t, hub.Status.URL.String(), restored.Status.URL.String())
@@ -865,7 +912,7 @@ func TestLLMInferenceServiceConversion_PreservesTracing(t *testing.T) {
 	}
 
 	// v1alpha1 -> v1alpha2
-	hub := &v1alpha2.LLMInferenceService{}
+	hub := newTestHubLLM(&v1alpha2.LLMInferenceService{})
 	err := src.ConvertTo(hub)
 	require.NoError(t, err)
 
@@ -901,7 +948,7 @@ func TestLLMInferenceServiceConversion_TracingNilPreserved(t *testing.T) {
 	}
 
 	// v1alpha1 -> v1alpha2
-	hub := &v1alpha2.LLMInferenceService{}
+	hub := newTestHubLLM(&v1alpha2.LLMInferenceService{})
 	err := src.ConvertTo(hub)
 	require.NoError(t, err)
 	assert.Nil(t, hub.Spec.Tracing)
@@ -928,7 +975,7 @@ func TestLLMInferenceServiceConversion_TracingEmptyStruct(t *testing.T) {
 	}
 
 	// v1alpha1 -> v1alpha2
-	hub := &v1alpha2.LLMInferenceService{}
+	hub := newTestHubLLM(&v1alpha2.LLMInferenceService{})
 	err := src.ConvertTo(hub)
 	require.NoError(t, err)
 	require.NotNil(t, hub.Spec.Tracing, "empty tracing struct should be preserved")
@@ -984,7 +1031,7 @@ func TestLLMInferenceServiceConversion_PreservesTokenizer(t *testing.T) {
 			}
 
 			// v1alpha1 -> v1alpha2
-			dst := &v1alpha2.LLMInferenceService{}
+			dst := newTestHubLLM(&v1alpha2.LLMInferenceService{})
 			err := src.ConvertTo(dst)
 			require.NoError(t, err)
 
@@ -1035,7 +1082,7 @@ func TestLLMInferenceServiceConversion_NilTokenizerPreserved(t *testing.T) {
 	}
 
 	// v1alpha1 -> v1alpha2
-	dst := &v1alpha2.LLMInferenceService{}
+	dst := newTestHubLLM(&v1alpha2.LLMInferenceService{})
 	err := src.ConvertTo(dst)
 	require.NoError(t, err)
 
@@ -1085,7 +1132,7 @@ func TestLLMInferenceServiceConversion_PreservesRolloutStrategy(t *testing.T) {
 	}
 
 	// v1alpha1 -> v1alpha2
-	hub := &v1alpha2.LLMInferenceService{}
+	hub := newTestHubLLM(&v1alpha2.LLMInferenceService{})
 	err := src.ConvertTo(hub)
 	require.NoError(t, err)
 
@@ -1126,7 +1173,7 @@ func TestLLMInferenceServiceConversion_NilRolloutStrategy(t *testing.T) {
 		},
 	}
 
-	hub := &v1alpha2.LLMInferenceService{}
+	hub := newTestHubLLM(&v1alpha2.LLMInferenceService{})
 	err := src.ConvertTo(hub)
 	require.NoError(t, err)
 	assert.Nil(t, hub.Spec.RolloutStrategy)
@@ -1191,7 +1238,7 @@ func TestLLMInferenceServiceConversion_PreservesKVCacheOffloading(t *testing.T) 
 	}
 
 	// v1alpha1 -> v1alpha2
-	hub := &v1alpha2.LLMInferenceService{}
+	hub := newTestHubLLM(&v1alpha2.LLMInferenceService{})
 	err := src.ConvertTo(hub)
 	require.NoError(t, err)
 
@@ -1256,7 +1303,7 @@ func TestLLMInferenceServiceConversion_NilKVCacheOffloadingPreserved(t *testing.
 	}
 
 	// v1alpha1 -> v1alpha2
-	hub := &v1alpha2.LLMInferenceService{}
+	hub := newTestHubLLM(&v1alpha2.LLMInferenceService{})
 	err := src.ConvertTo(hub)
 	require.NoError(t, err)
 	assert.Nil(t, hub.Spec.KVCacheOffloading)
@@ -1297,7 +1344,7 @@ func TestLLMInferenceServiceConversion_KVCacheOnPrefill(t *testing.T) {
 	}
 
 	// v1alpha1 -> v1alpha2
-	hub := &v1alpha2.LLMInferenceService{}
+	hub := newTestHubLLM(&v1alpha2.LLMInferenceService{})
 	err := src.ConvertTo(hub)
 	require.NoError(t, err)
 
@@ -1327,7 +1374,7 @@ func TestLLMInferenceServiceConversion_PreservesRuntime(t *testing.T) {
 		Model:   LLMModelSpec{URI: apis.URL{Scheme: "hf", Host: "meta-llama/Llama-2-7b"}, Name: &modelName},
 		Runtime: ptr.To("kserve-llm-sglang"),
 	}}
-	dst := &v1alpha2.LLMInferenceService{}
+	dst := newTestHubLLM(&v1alpha2.LLMInferenceService{})
 	require.NoError(t, src.ConvertTo(dst))
 	require.NotNil(t, dst.Spec.Runtime)
 	assert.Equal(t, "kserve-llm-sglang", *dst.Spec.Runtime)
@@ -1342,7 +1389,7 @@ func TestLLMInferenceServiceConversion_EmptyRuntimeRoundTrips(t *testing.T) {
 	src := &LLMInferenceService{ObjectMeta: metav1.ObjectMeta{Name: "test-llm-isvc", Namespace: "default"}, Spec: LLMInferenceServiceSpec{
 		Model: LLMModelSpec{URI: apis.URL{Scheme: "hf", Host: "meta-llama/Llama-2-7b"}, Name: &modelName},
 	}}
-	dst := &v1alpha2.LLMInferenceService{}
+	dst := newTestHubLLM(&v1alpha2.LLMInferenceService{})
 	require.NoError(t, src.ConvertTo(dst))
 	assert.Nil(t, dst.Spec.Runtime)
 	restored := &LLMInferenceService{}

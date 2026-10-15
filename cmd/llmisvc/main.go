@@ -17,6 +17,7 @@ limitations under the License.
 package main
 
 import (
+	"encoding/json"
 	"context"
 	"crypto/tls"
 	"flag"
@@ -53,8 +54,9 @@ import (
 
 	"github.com/kserve/kserve/pkg/apis/serving/v1alpha1"
 	"github.com/kserve/kserve/pkg/apis/serving/v1alpha2"
+	"github.com/kserve/kserve/pkg/apis/serving/v1beta1"
 	"github.com/kserve/kserve/pkg/constants"
-	"github.com/kserve/kserve/pkg/controller/v1alpha2/llmisvc"
+	"github.com/kserve/kserve/pkg/controller/llmisvc"
 	kservemetrics "github.com/kserve/kserve/pkg/metrics"
 	"github.com/kserve/kserve/pkg/oteljson"
 	kservescheme "github.com/kserve/kserve/pkg/scheme"
@@ -260,10 +262,15 @@ func main() {
 
 	ctrlmetrics.Registry.MustRegister(llmisvc.NewInfoMetricsCollector(mgr.GetClient()))
 
-	// Register webhooks: validation (v1alpha1, v1alpha2) and conversion
+	// Register webhooks: validation (v1alpha1, v1alpha2, v1beta1) and conversion
 	v1alpha2LLMValidator := &v1alpha2.LLMInferenceServiceValidator{}
 	if err = v1alpha2LLMValidator.SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create webhook", "webhook", "llminferenceservice-v1alpha2")
+		os.Exit(1)
+	}
+	v1beta1LLMValidator := &v1beta1.LLMInferenceServiceValidator{}
+	if err = v1beta1LLMValidator.SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create webhook", "webhook", "llminferenceservice-v1beta1")
 		os.Exit(1)
 	}
 	v1alpha1LLMValidator := &v1alpha1.LLMInferenceServiceValidator{}
@@ -291,12 +298,21 @@ func main() {
 		setupLog.Error(err, "unable to create webhook", "webhook", "llminferenceserviceconfig-v1alpha2")
 		os.Exit(1)
 	}
-	if err = ctrl.NewWebhookManagedBy(mgr, &v1alpha2.LLMInferenceService{}).
+	v1beta1ConfigValidator := &v1beta1.LLMInferenceServiceConfigValidator{
+		ConfigValidationFunc:           createV1Beta1ConfigValidationFunc(mgr.GetAPIReader()),
+		WellKnownConfigChecker:         wellKnownConfigChecker,
+		PreventWellKnownConfigDeletion: preventWellKnownConfigDeletion,
+	}
+	if err = v1beta1ConfigValidator.SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create webhook", "webhook", "llminferenceserviceconfig-v1beta1")
+		os.Exit(1)
+	}
+	if err = ctrl.NewWebhookManagedBy(mgr, &v1beta1.LLMInferenceService{}).
 		Complete(); err != nil {
 		setupLog.Error(err, "unable to create conversion webhook", "webhook", "llminferenceservice")
 		os.Exit(1)
 	}
-	if err = ctrl.NewWebhookManagedBy(mgr, &v1alpha2.LLMInferenceServiceConfig{}).
+	if err = ctrl.NewWebhookManagedBy(mgr, &v1beta1.LLMInferenceServiceConfig{}).
 		Complete(); err != nil {
 		setupLog.Error(err, "unable to create conversion webhook", "webhook", "llminferenceserviceconfig")
 		os.Exit(1)
@@ -329,6 +345,13 @@ func main() {
 		WithDefaulter(&llmisvcwebhook.LLMInferenceServiceDefaulterV1Alpha2{Client: mgr.GetClient(), Clientset: clientSet}).
 		Complete(); err != nil {
 		setupLog.Error(err, "unable to create defaulting webhook", "webhook", "llminferenceservice-v1alpha2")
+		os.Exit(1)
+	}
+
+	if err = ctrl.NewWebhookManagedBy(mgr, &v1beta1.LLMInferenceService{}).
+		WithDefaulter(&llmisvcwebhook.LLMInferenceServiceDefaulterV1Beta1{Client: mgr.GetClient(), Clientset: clientSet}).
+		Complete(); err != nil {
+		setupLog.Error(err, "unable to create defaulting webhook", "webhook", "llminferenceservice-v1beta1")
 		os.Exit(1)
 	}
 
@@ -433,7 +456,7 @@ func validateLLMISVCConfig(ctx context.Context, reader client.Reader, config *v1
 func createV1Alpha1ConfigValidationFunc(reader client.Reader) func(ctx context.Context, config *v1alpha1.LLMInferenceServiceConfig) error {
 	return func(ctx context.Context, config *v1alpha1.LLMInferenceServiceConfig) error {
 		v2Config := &v1alpha2.LLMInferenceServiceConfig{}
-		if err := config.ConvertTo(v2Config); err != nil {
+		if err := jsonRoundTripToV2Config(config, v2Config); err != nil {
 			return err
 		}
 		return validateLLMISVCConfig(ctx, reader, v2Config)
@@ -445,4 +468,26 @@ func createV1Alpha2ConfigValidationFunc(reader client.Reader) func(ctx context.C
 	return func(ctx context.Context, config *v1alpha2.LLMInferenceServiceConfig) error {
 		return validateLLMISVCConfig(ctx, reader, config)
 	}
+}
+
+// createV1Beta1ConfigValidationFunc creates a validation function for v1beta1 LLMInferenceServiceConfig.
+// It JSON-round-trips into the v1alpha2 shape (schemas are currently identical) and validates there.
+func createV1Beta1ConfigValidationFunc(reader client.Reader) func(ctx context.Context, config *v1beta1.LLMInferenceServiceConfig) error {
+	return func(ctx context.Context, config *v1beta1.LLMInferenceServiceConfig) error {
+		v2Config := &v1alpha2.LLMInferenceServiceConfig{}
+		if err := jsonRoundTripToV2Config(config, v2Config); err != nil {
+			return err
+		}
+		return validateLLMISVCConfig(ctx, reader, v2Config)
+	}
+}
+
+// jsonRoundTripToV2Config copies any LLMInferenceServiceConfig-shaped value into a v1alpha2 scratch via JSON.
+// Used because v1alpha2 is no longer the Hub; schemas are identical so this is an identity conversion.
+func jsonRoundTripToV2Config(src, dst interface{}) error {
+	data, err := json.Marshal(src)
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, dst)
 }

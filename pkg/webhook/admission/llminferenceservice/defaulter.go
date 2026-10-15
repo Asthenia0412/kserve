@@ -18,6 +18,7 @@ package llminferenceservice
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"k8s.io/apimachinery/pkg/runtime"
@@ -49,16 +50,20 @@ type LLMInferenceServiceDefaulterV1Alpha1 struct {
 var _ admission.Defaulter[*v1alpha1.LLMInferenceService] = &LLMInferenceServiceDefaulterV1Alpha1{}
 
 func (d *LLMInferenceServiceDefaulterV1Alpha1) Default(ctx context.Context, typedObj *v1alpha1.LLMInferenceService) error {
+	// v1beta1 is now the Hub; v1alpha1 speaks to it via JSON identity conversion
+	// plus annotation round-trip for Criticality fields. For the defaulting path,
+	// we use a straight JSON copy into a v1alpha2-shaped scratch (schemas match)
+	// since applyDefaults works on that shape.
 	llmSvcV2 := &v1alpha2.LLMInferenceService{}
-	if err := typedObj.ConvertTo(llmSvcV2); err != nil {
-		defaulterLogger.Error(err, "Unable to convert v1alpha1 object to LLMInferenceService v1alpha2")
+	if err := convertViaJSON(typedObj, llmSvcV2); err != nil {
+		defaulterLogger.Error(err, "Unable to convert v1alpha1 object to scratch LLMInferenceService v1alpha2")
 		return err
 	}
 	if err := d.applyDefaults(ctx, llmSvcV2); err != nil {
 		return err
 	}
-	if err := typedObj.ConvertFrom(llmSvcV2); err != nil {
-		defaulterLogger.Error(err, "Unable to convert LLMInferenceService v1alpha2 object back to v1alpha1")
+	if err := convertViaJSON(llmSvcV2, typedObj); err != nil {
+		defaulterLogger.Error(err, "Unable to convert scratch LLMInferenceService v1alpha2 back to v1alpha1")
 		return err
 	}
 	return nil
@@ -93,18 +98,28 @@ func (d *LLMInferenceServiceDefaulter) Default(ctx context.Context, obj runtime.
 		return applyDefaults(ctx, d.Client, d.Clientset, typedObj)
 	case *v1alpha1.LLMInferenceService:
 		llmSvcV2 := &v1alpha2.LLMInferenceService{}
-		if err := typedObj.ConvertTo(llmSvcV2); err != nil {
-			defaulterLogger.Error(err, "Unable to convert v1alpha1 object to LLMInferenceService v1alpha2")
+		if err := convertViaJSON(typedObj, llmSvcV2); err != nil {
+			defaulterLogger.Error(err, "Unable to convert v1alpha1 object to scratch LLMInferenceService v1alpha2")
 			return err
 		}
 		if err := applyDefaults(ctx, d.Client, d.Clientset, llmSvcV2); err != nil {
 			return err
 		}
-		if err := typedObj.ConvertFrom(llmSvcV2); err != nil {
-			defaulterLogger.Error(err, "Unable to convert LLMInferenceService v1alpha2 object back to v1alpha1")
+		if err := convertViaJSON(llmSvcV2, typedObj); err != nil {
+			defaulterLogger.Error(err, "Unable to convert scratch LLMInferenceService v1alpha2 back to v1alpha1")
 			return err
 		}
 		return nil
+	case *v1beta1.LLMInferenceService:
+		llmSvcV2 := &v1alpha2.LLMInferenceService{}
+		if err := convertViaJSON(typedObj, llmSvcV2); err != nil {
+			defaulterLogger.Error(err, "Unable to convert v1beta1 Hub object to scratch LLMInferenceService v1alpha2")
+			return err
+		}
+		if err := applyDefaults(ctx, d.Client, d.Clientset, llmSvcV2); err != nil {
+			return err
+		}
+		return convertViaJSON(llmSvcV2, typedObj)
 	default:
 		err := fmt.Errorf("unsupported object type %T for LLMInferenceService defaulter", obj)
 		defaulterLogger.Error(err, "Unable to convert object to LLMInferenceService")
@@ -258,4 +273,41 @@ func clearLoRALocalModelMetadata(llmSvc *v1alpha2.LLMInferenceService) {
 func DeleteLocalModelMetadata(llmSvc *v1alpha2.LLMInferenceService) {
 	clearBaseLocalModelMetadata(llmSvc)
 	clearLoRALocalModelMetadata(llmSvc)
+}
+
+// +kubebuilder:webhook:path=/mutate-serving-kserve-io-v1beta1-llminferenceservice,mutating=true,failurePolicy=fail,sideEffects=None,groups=serving.kserve.io,resources=llminferenceservices,verbs=create;update,versions=v1beta1,name=llminferenceservice.kserve-webhook-server.v1beta1.defaulter,admissionReviewVersions=v1
+
+// LLMInferenceServiceDefaulterV1Beta1 sets local model cache labels on v1beta1 LLMInferenceService resources.
+// The defaulting logic lives in the v1alpha2 helper (shared schema); this defaulter bridges v1beta1 ↔ v1alpha2.
+type LLMInferenceServiceDefaulterV1Beta1 struct {
+	Client    client.Client
+	Clientset kubernetes.Interface
+}
+
+var _ admission.Defaulter[*v1beta1.LLMInferenceService] = &LLMInferenceServiceDefaulterV1Beta1{}
+
+func (d *LLMInferenceServiceDefaulterV1Beta1) Default(ctx context.Context, typedObj *v1beta1.LLMInferenceService) error {
+	llmSvcV2 := &v1alpha2.LLMInferenceService{}
+	if err := convertViaJSON(typedObj, llmSvcV2); err != nil {
+		defaulterLogger.Error(err, "Unable to convert v1beta1 object to LLMInferenceService v1alpha2")
+		return err
+	}
+	if err := d.applyDefaults(ctx, llmSvcV2); err != nil {
+		return err
+	}
+	return convertViaJSON(llmSvcV2, typedObj)
+}
+
+func (d *LLMInferenceServiceDefaulterV1Beta1) applyDefaults(ctx context.Context, llmSvc *v1alpha2.LLMInferenceService) error {
+	return applyDefaults(ctx, d.Client, d.Clientset, llmSvc)
+}
+
+// convertViaJSON marshals src to JSON then unmarshals into dst. Both must be pointers.
+// This is an identity conversion between structurally identical types (v1alpha2 ↔ v1beta1).
+func convertViaJSON(src, dst interface{}) error {
+	data, err := json.Marshal(src)
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, dst)
 }

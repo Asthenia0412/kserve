@@ -139,7 +139,7 @@ check: precommit
 
 # Run tests
 # Override TEST_PKGS to focus on specific packages, e.g.:
-#   make test TEST_PKGS="./pkg/controller/v1alpha2/llmisvc/..."
+#   make test TEST_PKGS="./pkg/controller/llmisvc/..."
 TEST_PKGS ?= $$(go list ./pkg/...) ./cmd/...
 TEST_TIMEOUT ?= 30m
 test: fmt vet manifests envtest test-qpext
