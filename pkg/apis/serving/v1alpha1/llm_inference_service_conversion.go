@@ -140,9 +140,8 @@ func setHubPoolSpec(hub conversion.Hub, poolSpec *igwapiv1.InferencePoolSpec) er
 			if !isLast {
 				hubVal = hubVal.Elem()
 			}
-		} else if hubVal.Kind() == reflect.Struct && !isLast {
-			// Spec is a struct (not pointer), already dereferenced
 		}
+		// Non-pointer non-final kinds (struct, etc.) are already dereferenced — no-op needed.
 	}
 	// hubVal is now the Spec pointer field (already allocated above if nil)
 	dstPtr := reflect.New(hubVal.Type().Elem())
@@ -197,7 +196,7 @@ func findFieldInStruct(val reflect.Value, name string) reflect.Value {
 	}
 	// Walk embedded structs
 	t := val.Type()
-	for i := 0; i < t.NumField(); i++ {
+	for i := range t.NumField() {
 		f := t.Field(i)
 		if !f.IsExported() {
 			continue
@@ -250,7 +249,7 @@ func flattenStructFields(val reflect.Value, depth int) []structField {
 
 	var fields []structField
 	t := val.Type()
-	for i := 0; i < t.NumField(); i++ {
+	for i := range t.NumField() {
 		f := t.Field(i)
 		if !f.IsExported() {
 			continue
@@ -338,7 +337,7 @@ func copySingleField(src, dst reflect.Value, srcType, dstType reflect.Type) erro
 			return nil
 		}
 		newSlice := reflect.MakeSlice(dstType, src.Len(), src.Cap())
-		for i := 0; i < src.Len(); i++ {
+		for i := range src.Len() {
 			if err := copySingleField(src.Index(i), newSlice.Index(i), srcType.Elem(), dstType.Elem()); err != nil {
 				return err
 			}
