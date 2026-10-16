@@ -11,15 +11,11 @@ model_dir = "."
 BST_FILE = "model.bst"
 
 iris = load_iris()
-y = iris['target']
-X = iris['data']
+y = iris["target"]
+X = iris["data"]
 dtrain = lgb.Dataset(X, label=y)
 
-params = {
-    'objective':'multiclass', 
-    'metric':'softmax',
-    'num_class': 3
-}
+params = {"objective": "multiclass", "metric": "softmax", "num_class": 3}
 lgb_model = lgb.train(params=params, train_set=dtrain)
 model_file = os.path.join(model_dir, BST_FILE)
 lgb_model.save_model(model_file)
@@ -36,11 +32,14 @@ We can also do some simple predictions
 ```python
 import requests
 
-request = {'sepal_width_(cm)': {0: 3.5}, 'petal_length_(cm)': {0: 1.4}, 'petal_width_(cm)': {0: 0.2},'sepal_length_(cm)': {0: 5.1} }
-formData = {
-    'inputs': [request]
+request = {
+    "sepal_width_(cm)": {0: 3.5},
+    "petal_length_(cm)": {0: 1.4},
+    "petal_width_(cm)": {0: 0.2},
+    "sepal_length_(cm)": {0: 5.1},
 }
-res = requests.post('http://localhost:8080/v1/models/lgb:predict', json=formData)
+formData = {"inputs": [request]}
+res = requests.post("http://localhost:8080/v1/models/lgb:predict", json=formData)
 print(res)
 print(res.text)
 ```

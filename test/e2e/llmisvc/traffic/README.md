@@ -49,29 +49,29 @@ def test_rolling_upgrade_under_load(traffic_driver):
 ```python
 driver = TrafficDriver(
     url="http://gateway/v1/completions",
-    method="POST",                          # default
+    method="POST",  # default
     headers={"X-Gateway-Model-Name": "..."},
     payload={"model": "m", "prompt": "hi", "max_tokens": 5},
-    rate=2.0,                               # requests per second
-    timeout=15.0,                           # per-request timeout
-    session=None,                           # optional shared session
+    rate=2.0,  # requests per second
+    timeout=15.0,  # per-request timeout
+    session=None,  # optional shared session
 )
 
-driver.start(warmup=True)   # blocks until first 2xx, warmup excluded from report
-driver.mark("phase_name")   # record a named timestamp
-report = driver.stop()       # stop sending, return TrafficReport
+driver.start(warmup=True)  # blocks until first 2xx, warmup excluded from report
+driver.mark("phase_name")  # record a named timestamp
+report = driver.stop()  # stop sending, return TrafficReport
 ```
 
 ### TrafficReport
 
 ```python
-report.all                              # Slice over everything
-report.phase("baseline")               # between "baseline" mark and next mark
-report.between("a", "b")               # between two marks
+report.all  # Slice over everything
+report.phase("baseline")  # between "baseline" mark and next mark
+report.between("a", "b")  # between two marks
 report.around("mutation", before=2, after=10)  # window around a mark
-report.since("settled")                 # from mark to end
-report.until("mutation")               # from start to mark
-report.marks                            # dict of mark_name -> monotonic timestamp
+report.since("settled")  # from mark to end
+report.until("mutation")  # from start to mark
+report.marks  # dict of mark_name -> monotonic timestamp
 ```
 
 ### Slice
@@ -79,23 +79,23 @@ report.marks                            # dict of mark_name -> monotonic timesta
 ```python
 s = report.phase("baseline")
 
-s.count                                 # total requests
-s.successes()                           # Slice of 2xx responses
-s.errors()                              # Slice of non-2xx / connection errors
+s.count  # total requests
+s.successes()  # Slice of 2xx responses
+s.errors()  # Slice of non-2xx / connection errors
 s.where(lambda r: "v1" in r.headers.get("x-inference-pod", ""))
 
-s.by_header("x-inference-pod")          # Dict[str, Slice] grouped by header value
-s.by_status()                           # Dict[int, Slice] grouped by status code
-s.header_values("x-inference-pod")      # Counter[str]
+s.by_header("x-inference-pod")  # Dict[str, Slice] grouped by header value
+s.by_status()  # Dict[int, Slice] grouped by status code
+s.header_values("x-inference-pod")  # Counter[str]
 
-s.latency_percentile(0.95)             # p95 latency in seconds
-s.achieved_rate                         # actual requests/sec
-s.first_seen(predicate)                 # first ResponseRecord matching predicate
+s.latency_percentile(0.95)  # p95 latency in seconds
+s.achieved_rate  # actual requests/sec
+s.first_seen(predicate)  # first ResponseRecord matching predicate
 
-s.assert_no_errors("context msg")       # raises with rich summary on failure
-s.assert_error_rate(0.01, "msg")        # max 1% error rate
-s.assert_min_samples(10, "msg")         # minimum sample count
-s.summary()                             # human-readable summary string
+s.assert_no_errors("context msg")  # raises with rich summary on failure
+s.assert_error_rate(0.01, "msg")  # max 1% error rate
+s.assert_min_samples(10, "msg")  # minimum sample count
+s.summary()  # human-readable summary string
 ```
 
 ## Fixture
@@ -106,11 +106,13 @@ The `traffic_driver` fixture in `conftest.py` is a factory - call it to create a
 @pytest.fixture
 def traffic_driver():
     drivers = []
+
     def factory(url, *, warmup=False, **kwargs):
         driver = TrafficDriver(url, **kwargs)
         drivers.append(driver)
         driver.start(warmup=warmup)
         return driver
+
     yield factory
     for d in reversed(drivers):
         if d.is_running:

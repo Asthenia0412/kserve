@@ -20,6 +20,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"reflect"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/kubernetes"
@@ -303,11 +304,23 @@ func (d *LLMInferenceServiceDefaulterV1Beta1) applyDefaults(ctx context.Context,
 }
 
 // convertViaJSON marshals src to JSON then unmarshals into dst. Both must be pointers.
-// This is an identity conversion between structurally identical types (v1alpha2 ↔ v1beta1).
+// This is an identity conversion between structurally identical types (v1alpha1 ↔ v1alpha2 ↔ v1beta1).
+//
+// To avoid Go's json.Unmarshal leaving existing dst map/slice entries intact when
+// the source JSON omits those keys (e.g. after clearing labels/annotations), we unmarshal
+// into a fresh instance of the dst type and then shallow-copy into the caller's pointer.
 func convertViaJSON(src, dst interface{}) error {
 	data, err := json.Marshal(src)
 	if err != nil {
 		return err
 	}
-	return json.Unmarshal(data, dst)
+	// Create a fresh zero-value instance of dst's element type so that
+	// json.Unmarshal starts from a clean slate (no stale map entries).
+	dstVal := reflect.ValueOf(dst)
+	freshDst := reflect.New(dstVal.Elem().Type()).Interface()
+	if err := json.Unmarshal(data, freshDst); err != nil {
+		return err
+	}
+	dstVal.Elem().Set(reflect.ValueOf(freshDst).Elem())
+	return nil
 }

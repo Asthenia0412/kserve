@@ -17,8 +17,8 @@ limitations under the License.
 package fixture
 
 import (
-	"encoding/json"
 	"context"
+	"encoding/json"
 	"path/filepath"
 	"time"
 
@@ -161,7 +161,6 @@ func SetupWebhooks(cfg *rest.Config, mgr ctrl.Manager) error {
 		}).
 		Complete()
 }
-
 
 // jsonRoundTripToV2Config copies any LLMInferenceServiceConfig-shaped value into a v1alpha2 scratch via JSON.
 func jsonRoundTripToV2Config(src, dst interface{}) error {

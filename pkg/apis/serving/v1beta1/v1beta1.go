@@ -40,7 +40,7 @@ var (
 	// SchemeBuilder is used to add go types to the GroupVersionKind scheme
 	SchemeBuilder = runtime.NewSchemeBuilder(addKnownTypes)
 
-	LLMInferenceServiceGVK      = SchemeGroupVersion.WithKind("LLMInferenceService")
+	LLMInferenceServiceGVK       = SchemeGroupVersion.WithKind("LLMInferenceService")
 	LLMInferenceServiceConfigGVK = SchemeGroupVersion.WithKind("LLMInferenceServiceConfig")
 
 	// AddToScheme is required by pkg/client/...

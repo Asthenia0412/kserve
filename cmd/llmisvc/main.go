@@ -17,9 +17,9 @@ limitations under the License.
 package main
 
 import (
-	"encoding/json"
 	"context"
 	"crypto/tls"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"os"
