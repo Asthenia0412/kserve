@@ -36,6 +36,7 @@ import (
 // LLMInferenceServiceConfigValidator is responsible for validating the LLMInferenceServiceConfig resource
 // when it is created, updated, or deleted.
 // +kubebuilder:object:generate=false
+// +k8s:openapi-gen=false
 type LLMInferenceServiceConfigValidator struct {
 	// ConfigValidationFunc is an optional function for additional validation logic.
 	// This can be set by the controller to inject validation that depends on controller packages.

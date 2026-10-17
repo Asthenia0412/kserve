@@ -56,7 +56,7 @@ func (t *testHubLLM) DeepCopyObject() runtime.Object {
 	if t == nil {
 		return nil
 	}
-	cp := t.LLMInferenceService.DeepCopy()
+	cp := t.DeepCopy()
 	return &testHubLLM{LLMInferenceService: *cp}
 }
 
@@ -76,7 +76,7 @@ func (t *testHubLLMConfig) DeepCopyObject() runtime.Object {
 	if t == nil {
 		return nil
 	}
-	cp := t.LLMInferenceServiceConfig.DeepCopy()
+	cp := t.DeepCopy()
 	return &testHubLLMConfig{LLMInferenceServiceConfig: *cp}
 }
 
