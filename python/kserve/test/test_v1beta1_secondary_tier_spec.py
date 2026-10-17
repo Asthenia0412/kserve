@@ -52,7 +52,7 @@ class TestV1beta1SecondaryTierSpec(unittest.TestCase):
             return V1beta1SecondaryTierSpec(
                 file_system = kserve.models.v1beta1_file_system_tier_spec.V1beta1FileSystemTierSpec(
                     empty_dir = kserve.models.v1beta1_empty_dir_tier_spec.V1beta1EmptyDirTierSpec(
-                        size = None, ), 
+                        size = '1Gi', ), 
                     pvc = kserve.models.v1beta1_pvc_tier_spec.V1beta1PVCTierSpec(
                         ref = kserve.models.v1beta1_pvc_ref_tier_spec.V1beta1PVCRefTierSpec(
                             name = '0', 

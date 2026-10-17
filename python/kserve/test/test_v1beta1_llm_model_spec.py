@@ -60,17 +60,17 @@ class TestV1beta1LLMModelSpec(unittest.TestCase):
                                 enabled = True, 
                                 resource_id = '0', ), 
                             name = '0', 
-                            uri = None, )
+                            uri = 'https://example.com/model', )
                         ], 
                     max_adapters = 56, 
                     max_cpu_adapters = 56, 
                     max_rank = 56, ), 
                 name = '0', 
-                uri = None
+                uri = 'https://example.com/model'
             )
         else :
             return V1beta1LLMModelSpec(
-                uri = None,
+                uri = 'https://example.com/model',
         )
 
     def testV1beta1LLMModelSpec(self):

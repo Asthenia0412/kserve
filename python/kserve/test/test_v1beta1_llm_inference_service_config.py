@@ -61,13 +61,13 @@ class TestV1beta1LLMInferenceServiceConfig(unittest.TestCase):
                         None
                         ], 
                     kv_cache_offloading = kserve.models.v1beta1_kv_cache_offloading_spec.V1beta1KVCacheOffloadingSpec(
-                        cpu = None, 
+                        cpu = '500m', 
                         eviction_policy = '0', 
                         secondary = [
                             kserve.models.v1beta1_secondary_tier_spec.V1beta1SecondaryTierSpec(
                                 file_system = kserve.models.v1beta1_file_system_tier_spec.V1beta1FileSystemTierSpec(
                                     empty_dir = kserve.models.v1beta1_empty_dir_tier_spec.V1beta1EmptyDirTierSpec(
-                                        size = None, ), 
+                                        size = '1Gi', ), 
                                     pvc = kserve.models.v1beta1_pvc_tier_spec.V1beta1PVCTierSpec(
                                         ref = kserve.models.v1beta1_pvc_ref_tier_spec.V1beta1PVCRefTierSpec(
                                             name = '0', 
@@ -85,13 +85,13 @@ class TestV1beta1LLMInferenceServiceConfig(unittest.TestCase):
                             adapters = [
                                 kserve.models.v1beta1_llm_model_spec.V1beta1LLMModelSpec(
                                     name = '0', 
-                                    uri = None, )
+                                    uri = 'https://example.com/model', )
                                 ], 
                             max_adapters = 56, 
                             max_cpu_adapters = 56, 
                             max_rank = 56, ), 
                         name = '0', 
-                        uri = None, ), 
+                        uri = 'https://example.com/model', ), 
                     parallelism = kserve.models.v1beta1_parallelism_spec.V1beta1ParallelismSpec(
                         data = 56, 
                         data_local = 56, 

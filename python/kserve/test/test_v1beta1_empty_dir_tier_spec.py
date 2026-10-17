@@ -50,11 +50,11 @@ class TestV1beta1EmptyDirTierSpec(unittest.TestCase):
         # model = kserve.models.v1beta1_empty_dir_tier_spec.V1beta1EmptyDirTierSpec()  # noqa: E501
         if include_optional :
             return V1beta1EmptyDirTierSpec(
-                size = None
+                size = '1Gi'
             )
         else :
             return V1beta1EmptyDirTierSpec(
-                size = None,
+                size = '1Gi',
         )
 
     def testV1beta1EmptyDirTierSpec(self):

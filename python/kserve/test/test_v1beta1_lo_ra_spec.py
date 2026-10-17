@@ -60,7 +60,7 @@ class TestV1beta1LoRASpec(unittest.TestCase):
                             max_cpu_adapters = 56, 
                             max_rank = 56, ), 
                         name = '0', 
-                        uri = None, )
+                        uri = 'https://example.com/model', )
                     ], 
                 max_adapters = 56, 
                 max_cpu_adapters = 56, 
