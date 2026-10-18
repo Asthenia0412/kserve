@@ -6,7 +6,7 @@
 #
 # When adapter URIs match a LocalModelCache, the controller mounts cached PVCs
 # instead of downloading artifacts at pod startup.
-apiVersion: serving.kserve.io/v1alpha2
+apiVersion: serving.kserve.io/v1beta1
 kind: LLMInferenceService
 metadata:
   name: llm-lora-localmodelcache

@@ -98,6 +98,13 @@ func flattenStructFields(val reflect.Value, depth int) []structField {
 		if !f.IsExported() {
 			continue
 		}
+		// Skip metav1.TypeMeta — it carries the group/version/kind that must
+		// remain that of the destination type during conversion. Copying it
+		// from src would overwrite dst's GVK and break the conversion webhook
+		// (Kubernetes rejects objects whose APIVersion doesn't match the target).
+		if f.Name == "TypeMeta" {
+			continue
+		}
 		fv := val.Field(i)
 		if f.Anonymous && f.Type.Kind() == reflect.Struct {
 			fields = append(fields, flattenStructFields(fv, depth+1)...)

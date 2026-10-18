@@ -3,7 +3,7 @@
 # Model: NVIDIA Nemotron-3-Ultra-550B (hybrid Mamba+Attention)
 # Topology: P/D disaggregated (1 prefill + 1 decode, 8 GPUs each)
 # Requires: 2x H200 nodes, HF token secret
-apiVersion: serving.kserve.io/v1alpha2
+apiVersion: serving.kserve.io/v1beta1
 kind: LLMInferenceService
 metadata:
   name: nemotron-ultra-pd
