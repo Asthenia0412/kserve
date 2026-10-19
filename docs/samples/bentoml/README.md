@@ -45,10 +45,10 @@ from bentoml.frameworks.sklearn import SklearnModelArtifact
 from bentoml.adapters import DataframeInput
 import pandas as pd
 
-@env(auto_pip_dependencies=True)
-@artifacts([SklearnModelArtifact('model')])
-class IrisClassifier(BentoService):
 
+@env(auto_pip_dependencies=True)
+@artifacts([SklearnModelArtifact("model")])
+class IrisClassifier(BentoService):
     @api(input=DataframeInput(), batch=True)
     def predict(self, df: pd.DataFrame):
         return self.artifacts.model.predict(df)
@@ -64,12 +64,12 @@ from sklearn import datasets
 from iris_classifier import IrisClassifier
 import pandas as pd
 
-    # Load training data
+# Load training data
 iris = datasets.load_iris()
 X, y = iris.data, iris.target
 
-    # Model Training
-clf = svm.SVC(gamma='scale')
+# Model Training
+clf = svm.SVC(gamma="scale")
 clf.fit(X, y)
 
 svc = IrisClassifier()
@@ -77,7 +77,6 @@ svc.pack("model", clf)
 
 save_path = svc.save()
 print("Saved to:", saved_path)
-
 ```
 
 The sample code above can be found in the BentoML repository, run them directly with the

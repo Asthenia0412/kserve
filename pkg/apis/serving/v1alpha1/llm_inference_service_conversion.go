@@ -18,6 +18,8 @@ package v1alpha1
 
 import (
 	"encoding/json"
+	"fmt"
+	"reflect"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/controller-runtime/pkg/conversion"
@@ -29,9 +31,9 @@ import (
 )
 
 const (
-	// ModelCriticalityAnnotationKey stores the model criticality when converting to v1alpha2.
+	// ModelCriticalityAnnotationKey stores the model criticality when converting to the Hub version.
 	ModelCriticalityAnnotationKey = "internal.serving.kserve.io/model-criticality"
-	// LoRACriticalitiesAnnotationKey stores LoRA adapter criticalities as JSON when converting to v1alpha2.
+	// LoRACriticalitiesAnnotationKey stores LoRA adapter criticalities as JSON when converting to the Hub version.
 	LoRACriticalitiesAnnotationKey = "internal.serving.kserve.io/lora-criticalities"
 )
 
@@ -41,102 +43,500 @@ var (
 	_ conversion.Convertible = &LLMInferenceServiceConfig{}
 )
 
-// ConvertTo converts this LLMInferenceService (v1alpha1) to the Hub version (v1alpha2).
+// ConvertTo converts this LLMInferenceService (v1alpha1) to the Hub version (v1beta1).
+// Uses reflection-based field copying for identity bulk copy (avoids JSON round-trip
+// issues with apis.URL), then handles known type-mismatch edge cases and preserves
+// v1alpha1-only Criticality fields in annotations. The Hub concrete type lives in
+// pkg/apis/serving/v1beta1; we avoid a direct Go import to prevent an import cycle
+// with v1beta1/configmap.go → v1alpha1.KernelCachePath.
 func (src *LLMInferenceService) ConvertTo(dstRaw conversion.Hub) error {
-	dst := dstRaw.(*v1alpha2.LLMInferenceService)
-
-	// ObjectMeta
-	dst.ObjectMeta = src.ObjectMeta
-
-	// Preserve criticality values in annotations
-	saveCriticalityToAnnotations(&dst.ObjectMeta, &src.Spec.Model)
-
-	// Spec conversion
-	dst.Spec = convertSpecToV1Alpha2(&src.Spec)
-
-	// Status conversion
-	dst.Status = v1alpha2.LLMInferenceServiceStatus{
-		URL:     src.Status.URL,
-		Status:  src.Status.Status,
-		Address: src.Status.Address,
+	if err := reflectFieldCopy(src, dstRaw); err != nil {
+		return err
 	}
-	for _, addr := range src.Status.Addresses {
-		dst.Status.Addresses = append(dst.Status.Addresses, v1alpha2.SourcedAddress{
-			Addressable: addr,
-		})
+	// Edge case: InferencePoolSpec uses different GIE package types in v1alpha1 (fork)
+	// vs Hub (official). Reflection copy skips incompatible types, so we set it explicitly.
+	if src.Spec.Router != nil && src.Spec.Router.Scheduler != nil && src.Spec.Router.Scheduler.Pool != nil {
+		if err := setHubPoolSpec(dstRaw, convertPoolSpecForHub(src.Spec.Router.Scheduler.Pool)); err != nil {
+			return fmt.Errorf("setting InferencePoolSpec on Hub: %w", err)
+		}
 	}
-
+	saveCriticalityToAnnotationsOnHub(dstRaw, &src.Spec.Model)
 	return nil
 }
 
-// ConvertFrom converts the Hub version (v1alpha2) to this LLMInferenceService (v1alpha1).
+// ConvertFrom converts the Hub version (v1beta1) to this LLMInferenceService (v1alpha1).
 func (dst *LLMInferenceService) ConvertFrom(srcRaw conversion.Hub) error {
-	src := srcRaw.(*v1alpha2.LLMInferenceService)
-
-	// ObjectMeta
-	dst.ObjectMeta = src.ObjectMeta
-
-	// Spec conversion
-	dst.Spec = convertSpecFromV1Alpha2(&src.Spec)
-
-	// Restore criticality values from annotations
-	restoreCriticalityFromAnnotations(&dst.ObjectMeta, &dst.Spec.Model)
-
-	// Status conversion - Origin is lost on this path (v1alpha1 doesn't have it),
-	// but status is controller-produced and gets re-populated on next reconcile.
-	dst.Status = LLMInferenceServiceStatus{
-		URL:    src.Status.URL,
-		Status: src.Status.Status,
+	if err := reflectFieldCopy(srcRaw, dst); err != nil {
+		return err
 	}
-	dst.Status.Address = src.Status.Address //nolint:staticcheck // retained for schema compatibility
-	for _, sa := range src.Status.Addresses {
-		dst.Status.Addresses = append(dst.Status.Addresses, sa.Addressable)
+	// Edge case: InferencePoolSpec type mismatch (v1alpha1 fork vs Hub official GIE).
+	// Reflection copy handles Pool.Ref correctly (same *corev1.LocalObjectReference type)
+	// but cannot copy Pool.Spec because the GIE package types differ. We explicitly
+	// convert and set Spec only when Hub has a non-nil Spec. If Hub only has Pool.Ref
+	// (no Spec), the reflection copy already handled it and we must NOT overwrite
+	// Pool with nil.
+	if dst.Spec.Router != nil && dst.Spec.Router.Scheduler != nil && dst.Spec.Router.Scheduler.Pool != nil {
+		hubPoolSpec := getHubPoolSpec(srcRaw)
+		if hubPoolSpec != nil {
+			dst.Spec.Router.Scheduler.Pool.Spec = convertInferencePoolSpecFromV1(hubPoolSpec)
+		}
 	}
-
+	restoreCriticalityFromHubAnnotations(srcRaw, &dst.Spec.Model)
+	cleanupCriticalityAnnotations(&dst.ObjectMeta)
 	return nil
 }
 
-// ConvertTo converts this LLMInferenceServiceConfig (v1alpha1) to the Hub version (v1alpha2).
+// ConvertTo converts this LLMInferenceServiceConfig (v1alpha1) to the Hub version (v1beta1).
 func (src *LLMInferenceServiceConfig) ConvertTo(dstRaw conversion.Hub) error {
-	dst := dstRaw.(*v1alpha2.LLMInferenceServiceConfig)
-
-	// ObjectMeta
-	dst.ObjectMeta = src.ObjectMeta
-
-	// Preserve criticality values in annotations
-	saveCriticalityToAnnotations(&dst.ObjectMeta, &src.Spec.Model)
-
-	// Spec conversion
-	dst.Spec = convertSpecToV1Alpha2(&src.Spec)
-
-	// Status conversion (controller-managed, only duckv1.Status)
-	dst.Status = v1alpha2.LLMInferenceServiceConfigStatus{
-		Status: src.Status.Status,
+	if err := reflectFieldCopy(src, dstRaw); err != nil {
+		return err
 	}
-
+	saveCriticalityToAnnotationsOnHub(dstRaw, &src.Spec.Model)
 	return nil
 }
 
-// ConvertFrom converts the Hub version (v1alpha2) to this LLMInferenceServiceConfig (v1alpha1).
+// ConvertFrom converts the Hub version (v1beta1) to this LLMInferenceServiceConfig (v1alpha1).
 func (dst *LLMInferenceServiceConfig) ConvertFrom(srcRaw conversion.Hub) error {
-	src := srcRaw.(*v1alpha2.LLMInferenceServiceConfig)
+	if err := reflectFieldCopy(srcRaw, dst); err != nil {
+		return err
+	}
+	restoreCriticalityFromHubAnnotations(srcRaw, &dst.Spec.Model)
+	cleanupCriticalityAnnotations(&dst.ObjectMeta)
+	return nil
+}
 
-	// ObjectMeta
-	dst.ObjectMeta = src.ObjectMeta
-
-	// Spec conversion
-	dst.Spec = convertSpecFromV1Alpha2(&src.Spec)
-
-	// ReferencedBy is intentionally not converted: v1alpha1 has no equivalent field,
-	// and the controller re-populates it on the next reconciliation of the hub type.
-	dst.Status = LLMInferenceServiceConfigStatus{
-		Status: src.Status.Status,
+// setHubPoolSpec navigates the Hub struct via reflection to set the Spec.Router.Scheduler.Pool.Spec
+// field. We use reflection because we can't import the Hub's concrete type (v1beta1) here.
+func setHubPoolSpec(hub conversion.Hub, poolSpec *igwapiv1.InferencePoolSpec) error {
+	if poolSpec == nil {
+		return nil
+	}
+	hubVal := reflect.ValueOf(hub)
+	// Dereference interface and pointer
+	for hubVal.Kind() == reflect.Interface || hubVal.Kind() == reflect.Ptr {
+		if hubVal.IsNil() {
+			return nil
+		}
+		hubVal = hubVal.Elem()
+	}
+	if hubVal.Kind() != reflect.Struct {
+		return fmt.Errorf("Hub is not a struct: %s", hubVal.Type())
 	}
 
-	// Restore criticality values from annotations
-	restoreCriticalityFromAnnotations(&dst.ObjectMeta, &dst.Spec.Model)
-
+	// Navigate: Spec.Router.Scheduler.Pool.Spec
+	path := []string{"Spec", "Router", "Scheduler", "Pool", "Spec"}
+	for i, fieldName := range path {
+		isLast := i == len(path)-1
+		found := findFieldInStruct(hubVal, fieldName)
+		if !found.IsValid() {
+			return fmt.Errorf("field %s not found in %s", fieldName, hubVal.Type())
+		}
+		hubVal = found
+		// If it's a pointer, allocate if nil, then deref (except for the last one)
+		if hubVal.Kind() == reflect.Ptr {
+			if hubVal.IsNil() {
+				hubVal.Set(reflect.New(hubVal.Type().Elem()))
+			}
+			if !isLast {
+				hubVal = hubVal.Elem()
+			}
+		}
+		// Non-pointer non-final kinds (struct, etc.) are already dereferenced — no-op needed.
+	}
+	// hubVal is now the Spec pointer field (already allocated above if nil)
+	dstPtr := reflect.New(hubVal.Type().Elem())
+	dstPtr.Elem().Set(reflect.ValueOf(poolSpec).Elem())
+	hubVal.Set(dstPtr)
 	return nil
+}
+
+// getHubPoolSpec extracts Spec.Router.Scheduler.Pool.Spec from Hub via reflection.
+// Returns nil if not present or nil.
+func getHubPoolSpec(hub conversion.Hub) *igwapiv1.InferencePoolSpec {
+	hubVal := reflect.ValueOf(hub)
+	for hubVal.Kind() == reflect.Interface || hubVal.Kind() == reflect.Ptr {
+		if hubVal.IsNil() {
+			return nil
+		}
+		hubVal = hubVal.Elem()
+	}
+	if hubVal.Kind() != reflect.Struct {
+		return nil
+	}
+	for _, fieldName := range []string{"Spec", "Router", "Scheduler", "Pool", "Spec"} {
+		found := findFieldInStruct(hubVal, fieldName)
+		if !found.IsValid() {
+			return nil
+		}
+		hubVal = found
+		if hubVal.Kind() == reflect.Ptr {
+			if hubVal.IsNil() {
+				return nil
+			}
+			hubVal = hubVal.Elem()
+		}
+	}
+	// hubVal is the dereferenced InferencePoolSpec from GIE v1
+	if !hubVal.CanAddr() {
+		return nil
+	}
+	spec, ok := hubVal.Addr().Interface().(*igwapiv1.InferencePoolSpec)
+	if !ok {
+		return nil
+	}
+	return spec
+}
+
+// findFieldInStruct finds a named field in a struct, including promoted fields from
+// embedded (anonymous) structs. Returns zero Value if not found.
+func findFieldInStruct(val reflect.Value, name string) reflect.Value {
+	// First try direct lookup (handles non-embedded fields and top-level embedded)
+	if f := val.FieldByName(name); f.IsValid() {
+		return f
+	}
+	// Walk embedded structs
+	t := val.Type()
+	for i := range t.NumField() {
+		f := t.Field(i)
+		if !f.IsExported() {
+			continue
+		}
+		if f.Anonymous && f.Type.Kind() == reflect.Struct {
+			nested := findFieldInStruct(val.Field(i), name)
+			if nested.IsValid() {
+				return nested
+			}
+		}
+	}
+	return reflect.Value{}
+}
+
+// reflectFieldCopy copies all exported fields from src to dst by matching field names.
+// Both src and dst must be pointers to structs. Structurally compatible fields (same name,
+// same or assignable type) are copied recursively. Fields that don't exist in dst are
+// silently skipped. Embedded struct fields are flattened so wrapper types (like test
+// stubs that embed the Hub type) work correctly. This preserves values like apis.URL
+// exactly as-is, avoiding the JSON marshal/unmarshal round-trip bug in
+// knative.dev/pkg/apis.URL where '/' in Host gets URL-encoded to '%2F' and fails
+// Go's url.Parse during UnmarshalJSON.
+func reflectFieldCopy(src, dst interface{}) error {
+	return reflectFieldCopyValues(reflect.ValueOf(src), reflect.ValueOf(dst))
+}
+
+// structField represents a single field in a struct, including those promoted from
+// embedded structs. value is settable and represents the actual field location.
+type structField struct {
+	name  string
+	value reflect.Value
+	typ   reflect.Type
+}
+
+// flattenStructFields returns all exported fields of a struct, flattening embedded
+// (anonymous) struct fields so promoted fields are accessible by name.
+func flattenStructFields(val reflect.Value, depth int) []structField {
+	if depth > 4 {
+		return nil
+	}
+	for val.Kind() == reflect.Ptr {
+		if val.IsNil() {
+			return nil
+		}
+		val = val.Elem()
+	}
+	if val.Kind() != reflect.Struct {
+		return nil
+	}
+
+	var fields []structField
+	t := val.Type()
+	for i := range t.NumField() {
+		f := t.Field(i)
+		if !f.IsExported() {
+			continue
+		}
+		// Skip metav1.TypeMeta — it carries the group/version/kind that must
+		// remain that of the destination type during conversion. Copying it
+		// from src would overwrite dst's GVK and break the conversion webhook
+		// (Kubernetes rejects objects whose APIVersion doesn't match the target).
+		if f.Name == "TypeMeta" {
+			continue
+		}
+		fv := val.Field(i)
+		if f.Anonymous && f.Type.Kind() == reflect.Struct {
+			fields = append(fields, flattenStructFields(fv, depth+1)...)
+		} else {
+			fields = append(fields, structField{name: f.Name, value: fv, typ: f.Type})
+		}
+	}
+	return fields
+}
+
+func reflectFieldCopyValues(srcVal, dstVal reflect.Value) error {
+	// Dereference pointers
+	for srcVal.Kind() == reflect.Ptr {
+		if srcVal.IsNil() {
+			return nil
+		}
+		srcVal = srcVal.Elem()
+	}
+	for dstVal.Kind() == reflect.Ptr {
+		if dstVal.IsNil() {
+			dstVal.Set(reflect.New(dstVal.Type().Elem()))
+		}
+		dstVal = dstVal.Elem()
+	}
+
+	if srcVal.Kind() != reflect.Struct || dstVal.Kind() != reflect.Struct {
+		if srcVal.Type().AssignableTo(dstVal.Type()) {
+			dstVal.Set(srcVal)
+			return nil
+		}
+		return fmt.Errorf("cannot copy %s to %s", srcVal.Type(), dstVal.Type())
+	}
+
+	// Flatten both src and dst to handle embedded struct wrappers
+	srcFields := flattenStructFields(srcVal, 0)
+	dstFields := flattenStructFields(dstVal, 0)
+
+	// Build dst lookup map
+	dstByName := make(map[string]structField, len(dstFields))
+	for _, df := range dstFields {
+		if _, exists := dstByName[df.name]; !exists {
+			dstByName[df.name] = df
+		}
+	}
+
+	for _, sf := range srcFields {
+		df, ok := dstByName[sf.name]
+		if !ok {
+			continue
+		}
+		if err := copySingleField(sf.value, df.value, sf.typ, df.typ); err != nil {
+			return fmt.Errorf("field %s: %w", sf.name, err)
+		}
+	}
+	return nil
+}
+
+func copySingleField(src, dst reflect.Value, srcType, dstType reflect.Type) error {
+	// Identical type — direct assignment
+	if srcType == dstType {
+		dst.Set(src)
+		return nil
+	}
+
+	// Pointer types
+	if srcType.Kind() == reflect.Ptr && dstType.Kind() == reflect.Ptr {
+		if src.IsNil() {
+			dst.Set(reflect.Zero(dstType))
+			return nil
+		}
+		if dst.IsNil() {
+			dst.Set(reflect.New(dstType.Elem()))
+		}
+		return copySingleField(src.Elem(), dst.Elem(), srcType.Elem(), dstType.Elem())
+	}
+
+	// Slices
+	if srcType.Kind() == reflect.Slice && dstType.Kind() == reflect.Slice {
+		if src.IsNil() {
+			dst.Set(reflect.Zero(dstType))
+			return nil
+		}
+		newSlice := reflect.MakeSlice(dstType, src.Len(), src.Cap())
+		for i := range src.Len() {
+			if err := copySingleField(src.Index(i), newSlice.Index(i), srcType.Elem(), dstType.Elem()); err != nil {
+				return err
+			}
+		}
+		dst.Set(newSlice)
+		return nil
+	}
+
+	// Maps
+	if srcType.Kind() == reflect.Map && dstType.Kind() == reflect.Map {
+		if src.IsNil() {
+			dst.Set(reflect.Zero(dstType))
+			return nil
+		}
+		newMap := reflect.MakeMapWithSize(dstType, src.Len())
+		iter := src.MapRange()
+		for iter.Next() {
+			newKey := reflect.New(dstType.Key()).Elem()
+			if err := copySingleField(iter.Key(), newKey, srcType.Key(), dstType.Key()); err != nil {
+				return err
+			}
+			newVal := reflect.New(dstType.Elem()).Elem()
+			if err := copySingleField(iter.Value(), newVal, srcType.Elem(), dstType.Elem()); err != nil {
+				return err
+			}
+			newMap.SetMapIndex(newKey, newVal)
+		}
+		dst.Set(newMap)
+		return nil
+	}
+
+	// Nested structs
+	if srcType.Kind() == reflect.Struct && dstType.Kind() == reflect.Struct {
+		return reflectFieldCopyValues(src, dst)
+	}
+
+	// Fallback: assignable types
+	if srcType.AssignableTo(dstType) {
+		dst.Set(src)
+		return nil
+	}
+
+	// Incompatible types (e.g. different packages): skip silently
+	// Special cases like InferencePoolSpec must be handled explicitly by callers
+	return nil
+}
+
+// cleanupCriticalityAnnotations removes criticality-related annotations from an ObjectMeta.
+func cleanupCriticalityAnnotations(meta *metav1.ObjectMeta) {
+	if meta == nil || meta.Annotations == nil {
+		return
+	}
+	delete(meta.Annotations, ModelCriticalityAnnotationKey)
+	delete(meta.Annotations, LoRACriticalitiesAnnotationKey)
+	if len(meta.Annotations) == 0 {
+		meta.Annotations = nil
+	}
+}
+
+// convertPoolSpecForHub converts v1alpha1's GIE pool spec type to v1beta1's (official GIE v1).
+// v1alpha1 uses github.com/kserve/kserve/pkg/apis/gie/v1alpha2pool while v1beta1 uses
+// sigs.k8s.io/gateway-api-inference-extension/api/v1 — different packages, different structs.
+// The old field-by-field reflection copy cannot handle this, so we delegate to the
+// built-in ConvertTo/ConvertFrom on the GIE types.
+func convertPoolSpecForHub(pool *InferencePoolSpec) *igwapiv1.InferencePoolSpec {
+	if pool == nil || pool.Spec == nil {
+		return nil
+	}
+	return convertInferencePoolSpecToV1(pool.Spec)
+}
+
+// convertPoolSpecFromHub converts Hub's GIE pool spec type (official GIE v1) back to
+// v1alpha1's fork type (gie/v1alpha2pool).
+func convertPoolSpecFromHub(poolSpec *igwapiv1.InferencePoolSpec) *InferencePoolSpec {
+	if poolSpec == nil {
+		return nil
+	}
+	return &InferencePoolSpec{
+		Spec: convertInferencePoolSpecFromV1(poolSpec),
+	}
+}
+
+// saveCriticalityToAnnotationsOnHub serialises v1alpha1-only Criticality fields into
+// annotations on the Hub object. Operates on conversion.Hub via JSON indirection so we
+// don't need a direct import on the Hub's concrete package.
+func saveCriticalityToAnnotationsOnHub(hub conversion.Hub, model *LLMModelSpec) {
+	if model.Criticality != nil && *model.Criticality != "" {
+		setHubAnnotation(hub, ModelCriticalityAnnotationKey, string(*model.Criticality))
+	}
+	if model.LoRA != nil && len(model.LoRA.Adapters) > 0 {
+		loraCriticalities := make(map[int]string)
+		hasCriticality := false
+		for i, adapter := range model.LoRA.Adapters {
+			if adapter.Criticality != nil && *adapter.Criticality != "" {
+				loraCriticalities[i] = string(*adapter.Criticality)
+				hasCriticality = true
+			}
+		}
+		if hasCriticality {
+			if data, err := json.Marshal(loraCriticalities); err == nil {
+				setHubAnnotation(hub, LoRACriticalitiesAnnotationKey, string(data))
+			}
+		}
+	}
+}
+
+// restoreCriticalityFromHubAnnotations reads criticality annotations from the Hub object
+// and restores them into the v1alpha1 model spec.
+func restoreCriticalityFromHubAnnotations(hub conversion.Hub, model *LLMModelSpec) {
+	ann := getHubAnnotations(hub)
+	if ann == nil {
+		return
+	}
+	if criticality, ok := ann[ModelCriticalityAnnotationKey]; ok && criticality != "" {
+		c := Criticality(criticality)
+		model.Criticality = &c
+		delete(ann, ModelCriticalityAnnotationKey)
+	}
+	if loraData, ok := ann[LoRACriticalitiesAnnotationKey]; ok && loraData != "" {
+		var loraCriticalities map[int]string
+		if err := json.Unmarshal([]byte(loraData), &loraCriticalities); err == nil {
+			if model.LoRA != nil {
+				for i := range model.LoRA.Adapters {
+					if criticality, exists := loraCriticalities[i]; exists {
+						c := Criticality(criticality)
+						model.LoRA.Adapters[i].Criticality = &c
+					}
+				}
+			}
+		}
+		delete(ann, LoRACriticalitiesAnnotationKey)
+	}
+	if len(ann) == 0 {
+		setHubAnnotations(hub, nil)
+	} else {
+		setHubAnnotations(hub, ann)
+	}
+}
+
+// getHubAnnotations reads the metadata.annotations map from a conversion.Hub via JSON.
+func getHubAnnotations(hub conversion.Hub) map[string]string {
+	data, err := json.Marshal(hub)
+	if err != nil {
+		return nil
+	}
+	var wrap struct {
+		Metadata struct {
+			Annotations map[string]string `json:"annotations"`
+		} `json:"metadata"`
+	}
+	if err := json.Unmarshal(data, &wrap); err != nil {
+		return nil
+	}
+	return wrap.Metadata.Annotations
+}
+
+// setHubAnnotation sets a single annotation key/value on the Hub object via JSON.
+func setHubAnnotation(hub conversion.Hub, key, value string) {
+	ann := getHubAnnotations(hub)
+	if ann == nil {
+		ann = make(map[string]string)
+	}
+	ann[key] = value
+	setHubAnnotations(hub, ann)
+}
+
+// setHubAnnotations writes the annotations map back into the Hub object via JSON round-trip.
+func setHubAnnotations(hub conversion.Hub, ann map[string]string) {
+	data, err := json.Marshal(hub)
+	if err != nil {
+		return
+	}
+	var raw map[string]interface{}
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return
+	}
+	var metaRaw map[string]interface{}
+	if m, ok := raw["metadata"].(map[string]interface{}); ok {
+		metaRaw = m
+	} else {
+		metaRaw = make(map[string]interface{})
+	}
+	metaBytes, _ := json.Marshal(ann)
+	var annRaw interface{}
+	_ = json.Unmarshal(metaBytes, &annRaw)
+	metaRaw["annotations"] = annRaw
+	raw["metadata"] = metaRaw
+	out, err := json.Marshal(raw)
+	if err != nil {
+		return
+	}
+	_ = json.Unmarshal(out, hub)
 }
 
 func convertSpecToV1Alpha2(src *LLMInferenceServiceSpec) v1alpha2.LLMInferenceServiceSpec {

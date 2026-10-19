@@ -40,6 +40,9 @@ var (
 	// SchemeBuilder is used to add go types to the GroupVersionKind scheme
 	SchemeBuilder = runtime.NewSchemeBuilder(addKnownTypes)
 
+	LLMInferenceServiceGVK       = SchemeGroupVersion.WithKind("LLMInferenceService")
+	LLMInferenceServiceConfigGVK = SchemeGroupVersion.WithKind("LLMInferenceServiceConfig")
+
 	// AddToScheme is required by pkg/client/...
 	AddToScheme = SchemeBuilder.AddToScheme
 )
@@ -54,6 +57,8 @@ func Resource(resource string) schema.GroupResource {
 func addKnownTypes(s *runtime.Scheme) error {
 	s.AddKnownTypes(SchemeGroupVersion,
 		&InferenceService{}, &InferenceServiceList{},
+		&LLMInferenceService{}, &LLMInferenceServiceList{},
+		&LLMInferenceServiceConfig{}, &LLMInferenceServiceConfigList{},
 	)
 	metav1.AddToGroupVersion(s, SchemeGroupVersion)
 	return nil

@@ -1,5 +1,5 @@
 ---
-apiVersion: serving.kserve.io/v1alpha2
+apiVersion: serving.kserve.io/v1beta1
 kind: LLMInferenceService
 metadata:
   name: gpt-oss-20b

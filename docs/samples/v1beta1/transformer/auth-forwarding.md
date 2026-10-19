@@ -19,6 +19,7 @@ No additional configuration is needed. The following headers are forwarded autom
 ```python
 from kserve import Model, InferRequest, InferResponse
 
+
 class MyTransformer(Model):
     def __init__(self, name: str):
         super().__init__(name)
@@ -48,6 +49,7 @@ If your transformer **overrides the `predict()` method** or makes its own HTTP c
 ```python
 import httpx
 from kserve import Model
+
 
 class MyCustomTransformer(Model):
     def __init__(self, name: str):
