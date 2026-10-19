@@ -24,7 +24,7 @@
 # to set "true". It needs model-based routing to be active for the service
 # (serving.kserve.io/model-based-routing-enabled: "true" from the workload
 # preset); a route without model-routing matches keeps its paths.
-apiVersion: serving.kserve.io/v1beta1
+apiVersion: serving.kserve.io/v1alpha2
 kind: LLMInferenceServiceConfig
 metadata:
   name: kserve-config-llm-router-route

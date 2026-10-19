@@ -9,7 +9,7 @@
 # The `--omni` flag itself is appended to the main container args by the
 # controller: the base template's command forwards container args to
 # `vllm serve` (the "--" convention), so no command fork is needed here.
-apiVersion: serving.kserve.io/v1beta1
+apiVersion: serving.kserve.io/v1alpha2
 kind: LLMInferenceServiceConfig
 metadata:
   name: kserve-config-llm-omni-template
