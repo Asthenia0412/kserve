@@ -336,7 +336,7 @@ LORA_REALISTIC_FIXTURE_SIZE = 100
 LORA_EXACT_STRATEGY_MAX_ADAPTERS = 7
 _LORA_REALISTIC_FIXTURE = (
     project_root()
-    / "pkg/controller/v1alpha2/llmisvc/testdata/lora-adapter-names-realistic-v1.txt"
+    / "pkg/controller/llmisvc/testdata/lora-adapter-names-realistic-v1.txt"
 )
 _LORA_REALISTIC_FIXTURE_NAMES = _LORA_REALISTIC_FIXTURE.read_text().split()
 assert len(_LORA_REALISTIC_FIXTURE_NAMES) == LORA_REALISTIC_FIXTURE_SIZE, (

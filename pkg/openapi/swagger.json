@@ -2404,6 +2404,42 @@
         }
       }
     },
+    "v1beta1.ActuatorSpec": {
+      "description": "ActuatorSpec defines the autoscaling actuator backend for WVA. Exactly one of HPA or KEDA must be specified.",
+      "type": "object",
+      "properties": {
+        "hpa": {
+          "$ref": "#/definitions/v1beta1.HPAScalingSpec"
+        },
+        "keda": {
+          "$ref": "#/definitions/v1beta1.KEDAScalingSpec"
+        }
+      }
+    },
+    "v1beta1.AppliedConfigRef": {
+      "description": "AppliedConfigRef identifies a resource that contributed to the final merged configuration during reconciliation.",
+      "type": "object",
+      "required": [
+        "name",
+        "source"
+      ],
+      "properties": {
+        "name": {
+          "description": "Name of the LLMInferenceServiceConfig, ServingRuntime, or ClusterServingRuntime resource that was applied.",
+          "type": "string",
+          "default": ""
+        },
+        "namespace": {
+          "description": "Namespace where the LLMInferenceServiceConfig or ServingRuntime was resolved from. Omitted for cluster-scoped resources such as ClusterServingRuntime.",
+          "type": "string"
+        },
+        "source": {
+          "description": "Source indicates where this config came from: one KServe ships and selected itself, one the service referenced, or a container spec contributed by a ServingRuntime. A config resolved outside the KServe namespace reports UserRef even when it answers to a well-known preset name.",
+          "type": "string",
+          "default": ""
+        }
+      }
+    },
     "v1beta1.AuthenticationRef": {
       "type": "object",
       "properties": {
@@ -3543,6 +3579,64 @@
         }
       }
     },
+    "v1beta1.DirectKEDAScalingSpec": {
+      "description": "DirectKEDAScalingSpec configures direct KEDA scaling. It embeds KEDAScalingSpec for shared ScaledObject settings and adds user-defined triggers.",
+      "type": "object",
+      "required": [
+        "triggers"
+      ],
+      "properties": {
+        "advanced": {
+          "description": "Advanced specifies the advanced KEDA configuration options. This includes HPA behavior configuration and restore-to-original replica count settings.",
+          "$ref": "#/definitions/github.com.kedacore.keda.v2.apis.keda.v1alpha1.AdvancedConfig"
+        },
+        "cooldownPeriod": {
+          "description": "CooldownPeriod is the period in seconds to wait after the last trigger reported active before scaling the resource back to its minimum replica count. A value of 0 means scale down immediately with no cooldown.",
+          "type": "integer",
+          "format": "int32"
+        },
+        "fallback": {
+          "description": "Fallback defines the replica count to maintain when the scaler is in a fallback state (e.g., when metrics are unavailable). This allows the deployment to hold a safe replica count during metric outages rather than scaling to zero.",
+          "$ref": "#/definitions/github.com.kedacore.keda.v2.apis.keda.v1alpha1.Fallback"
+        },
+        "idleReplicaCount": {
+          "description": "IdleReplicaCount is the number of replicas KEDA will scale the resource down to when there are no triggers active. This must be less than minReplicas. Set to 0 for true scale-to-zero: KEDA scales the resource to zero replicas when idle and immediately back to minReplicas once a trigger becomes active. If not set, KEDA will not scale below minReplicas.",
+          "type": "integer",
+          "format": "int32"
+        },
+        "initialCooldownPeriod": {
+          "description": "InitialCooldownPeriod is the period in seconds to wait after the ScaledObject is created before KEDA starts evaluating triggers. Useful for LLM deployments where the model takes time to load before it can serve traffic, preventing premature scale-up decisions.",
+          "type": "integer",
+          "format": "int32"
+        },
+        "pollingInterval": {
+          "description": "PollingInterval is the interval in seconds to check each trigger on. Must be at least 1 second.",
+          "type": "integer",
+          "format": "int32"
+        },
+        "triggers": {
+          "description": "Triggers defines the KEDA scaling triggers. At least one trigger is required.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/github.com.kedacore.keda.v2.apis.keda.v1alpha1.ScaleTriggers"
+          },
+          "x-kubernetes-list-type": "atomic"
+        }
+      }
+    },
+    "v1beta1.EmptyDirTierSpec": {
+      "description": "EmptyDirTierSpec configures a node-local ephemeral emptyDir volume as a KV cache tier.",
+      "type": "object",
+      "required": [
+        "size"
+      ],
+      "properties": {
+        "size": {
+          "description": "Size is the maximum storage capacity for this tier (maps to emptyDir.sizeLimit). The controller also requests this amount as ephemeral-storage on the main container.",
+          "$ref": "#/definitions/resource.Quantity"
+        }
+      }
+    },
     "v1beta1.ExplainerConfig": {
       "type": "object",
       "required": [
@@ -4188,6 +4282,147 @@
         }
       }
     },
+    "v1beta1.FileSystemTierSpec": {
+      "description": "FileSystemTierSpec configures a POSIX disk secondary tier. Exactly one of EmptyDir or PVC must be set.",
+      "type": "object",
+      "properties": {
+        "emptyDir": {
+          "description": "EmptyDir uses a node-local ephemeral emptyDir volume. No StorageClass required. Each pod gets its own independent, node-local disk cache. The controller also adds an ephemeral-storage resource request to the main container equal to the size so the scheduler accounts for the disk space when placing the pod.",
+          "$ref": "#/definitions/v1beta1.EmptyDirTierSpec"
+        },
+        "pvc": {
+          "description": "PVC configures a PVC-backed disk cache tier. Either Spec (for a controller-managed ephemeral PVC per pod) or Ref (for a pre-existing user-managed PVC) must be set, but not both.",
+          "$ref": "#/definitions/v1beta1.PVCTierSpec"
+        }
+      }
+    },
+    "v1beta1.GatewayObjectReference": {
+      "description": "GatewayObjectReference is a reference to a Gateway resource. It extends UntypedObjectReference with Gateway-specific fields.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Name of the referenced object.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referenced object.",
+          "type": "string"
+        },
+        "sectionName": {
+          "description": "SectionName is the name of a section within the target resource. When set on a Gateway reference, it targets a specific listener by name. When unset, the route is attached to all listeners on the referenced Gateway that support the route type.",
+          "type": "string"
+        }
+      }
+    },
+    "v1beta1.GatewayRoutesSpec": {
+      "description": "GatewayRoutesSpec defines the configuration for a Gateway API route.",
+      "type": "object",
+      "properties": {
+        "group": {
+          "description": "Group identifies the routing group this LLMISVC belongs to. All members with the same group share weighted traffic distribution. Must be explicit - not inferred from spec.model.name.",
+          "type": "string"
+        },
+        "http": {
+          "description": "HTTP route configuration.",
+          "$ref": "#/definitions/v1beta1.HTTPRouteSpec"
+        },
+        "weight": {
+          "description": "Weight is the proportional traffic share for this member. Follows Gateway API backendRef weight semantics (proportional, not percentage).",
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "v1beta1.GatewaySpec": {
+      "description": "GatewaySpec defines the configuration for a Gateway API Gateway.",
+      "type": "object",
+      "properties": {
+        "refs": {
+          "description": "Refs provides references to existing, user-managed Gateway objects (\"Bring Your Own\" gateway). The controller will use the specified Gateway instead of creating one.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1beta1.GatewayObjectReference"
+          }
+        }
+      }
+    },
+    "v1beta1.GroupMemberStatus": {
+      "description": "GroupMemberStatus reports the observed state of a single group member.",
+      "type": "object",
+      "required": [
+        "name",
+        "weight"
+      ],
+      "properties": {
+        "backendRef": {
+          "description": "BackendRef is the resolved backend for this member (InferencePool or Service).",
+          "$ref": "#/definitions/sigs.k8s.io.gateway-api.apis.v1.BackendObjectReference"
+        },
+        "name": {
+          "description": "Name of the group member (LLMInferenceService name).",
+          "type": "string",
+          "default": ""
+        },
+        "stopped": {
+          "description": "Stopped is true when the member has the force-stop annotation set. A stopped member remains in the group but receives no traffic (weight is overridden to 0 regardless of the spec value).",
+          "type": "boolean"
+        },
+        "weight": {
+          "description": "Weight is the effective traffic weight for this member.",
+          "type": "integer",
+          "format": "int32",
+          "default": 0
+        }
+      }
+    },
+    "v1beta1.GroupStatus": {
+      "description": "GroupStatus reports the observed state of the routing group this LLMISVC belongs to.",
+      "type": "object",
+      "properties": {
+        "members": {
+          "description": "Members lists all observed members of the group with their weights and resolved backend references.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1beta1.GroupMemberStatus"
+          },
+          "x-kubernetes-list-map-keys": [
+            "name"
+          ],
+          "x-kubernetes-list-type": "map"
+        },
+        "name": {
+          "description": "Name of the routing group.",
+          "type": "string",
+          "default": ""
+        }
+      }
+    },
+    "v1beta1.HPAScalingSpec": {
+      "description": "HPAScalingSpec configures the HorizontalPodAutoscaler behavior.",
+      "type": "object",
+      "properties": {
+        "behavior": {
+          "$ref": "#/definitions/k8s.io.api.autoscaling.v2.HorizontalPodAutoscalerBehavior"
+        }
+      }
+    },
+    "v1beta1.HTTPRouteSpec": {
+      "description": "HTTPRouteSpec defines configurations for a Gateway API HTTPRoute. 'Spec' and 'Refs' are mutually exclusive and determine whether the route is managed by the controller or user-managed.",
+      "type": "object",
+      "properties": {
+        "refs": {
+          "description": "Refs provides references to existing, user-managed HTTPRoute objects (\"Bring Your Own\" route). The controller will validate the existence of these routes but will not modify them.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1.LocalObjectReference"
+          }
+        },
+        "spec": {
+          "description": "Spec allows for providing a custom specification for an HTTPRoute. If provided, the controller will create and manage an HTTPRoute with this specification.",
+          "$ref": "#/definitions/sigs.k8s.io.gateway-api.apis.v1.HTTPRouteSpec"
+        }
+      }
+    },
     "v1beta1.HuggingFaceRuntimeSpec": {
       "description": "HuggingFaceRuntimeSpec defines arguments for configuring HuggingFace model serving.",
       "type": "object",
@@ -4370,6 +4605,20 @@
         "workingDir": {
           "description": "Container's working directory. If not specified, the container runtime's default will be used, which might be configured in the container image. Cannot be updated.",
           "type": "string"
+        }
+      }
+    },
+    "v1beta1.InferencePoolSpec": {
+      "description": "InferencePoolSpec defines the configuration for an InferencePool. 'Spec' and 'Ref' are mutually exclusive.",
+      "type": "object",
+      "properties": {
+        "ref": {
+          "description": "Ref is a reference to an existing InferencePool.",
+          "$ref": "#/definitions/v1.LocalObjectReference"
+        },
+        "spec": {
+          "description": "Spec defines an inline InferencePool specification.",
+          "$ref": "#/definitions/sigs.k8s.io.gateway-api-inference-extension.api.v1.InferencePoolSpec"
         }
       }
     },
@@ -4634,6 +4883,77 @@
         }
       }
     },
+    "v1beta1.IngressSpec": {
+      "description": "IngressSpec defines the configuration for a Kubernetes Ingress.",
+      "type": "object",
+      "properties": {
+        "refs": {
+          "description": "Refs provides a reference to an existing, user-managed Ingress object (\"Bring Your Own\" ingress). The controller will not create an Ingress but will use the referenced one to populate status URLs.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1beta1.UntypedObjectReference"
+          }
+        }
+      }
+    },
+    "v1beta1.KEDAScalingSpec": {
+      "description": "KEDAScalingSpec configures the KEDA ScaledObject for autoscaling. The fields are directly from the upstream KEDA ScaledObject API.",
+      "type": "object",
+      "properties": {
+        "advanced": {
+          "description": "Advanced specifies the advanced KEDA configuration options. This includes HPA behavior configuration and restore-to-original replica count settings.",
+          "$ref": "#/definitions/github.com.kedacore.keda.v2.apis.keda.v1alpha1.AdvancedConfig"
+        },
+        "cooldownPeriod": {
+          "description": "CooldownPeriod is the period in seconds to wait after the last trigger reported active before scaling the resource back to its minimum replica count. A value of 0 means scale down immediately with no cooldown.",
+          "type": "integer",
+          "format": "int32"
+        },
+        "fallback": {
+          "description": "Fallback defines the replica count to maintain when the scaler is in a fallback state (e.g., when metrics are unavailable). This allows the deployment to hold a safe replica count during metric outages rather than scaling to zero.",
+          "$ref": "#/definitions/github.com.kedacore.keda.v2.apis.keda.v1alpha1.Fallback"
+        },
+        "idleReplicaCount": {
+          "description": "IdleReplicaCount is the number of replicas KEDA will scale the resource down to when there are no triggers active. This must be less than minReplicas. Set to 0 for true scale-to-zero: KEDA scales the resource to zero replicas when idle and immediately back to minReplicas once a trigger becomes active. If not set, KEDA will not scale below minReplicas.",
+          "type": "integer",
+          "format": "int32"
+        },
+        "initialCooldownPeriod": {
+          "description": "InitialCooldownPeriod is the period in seconds to wait after the ScaledObject is created before KEDA starts evaluating triggers. Useful for LLM deployments where the model takes time to load before it can serve traffic, preventing premature scale-up decisions.",
+          "type": "integer",
+          "format": "int32"
+        },
+        "pollingInterval": {
+          "description": "PollingInterval is the interval in seconds to check each trigger on. Must be at least 1 second.",
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "v1beta1.KVCacheOffloadingSpec": {
+      "description": "KVCacheOffloadingSpec configures KV cache offloading via vLLM's OffloadingConnector.",
+      "type": "object",
+      "required": [
+        "cpu"
+      ],
+      "properties": {
+        "cpu": {
+          "description": "CPU is the amount of CPU RAM to allocate as the primary KV cache tier (maps to vLLM kv_connector_extra_config.cpu_bytes_to_use). Accepts standard Kubernetes quantity notation, e.g. \"10Gi\".\n\nThis sizes one engine's tier. Tensor parallelism divides it across the engine's ranks, but a pod running parallelism.dataLocal local engines holds one copy each, so both the shared-memory volume and the container's memory limit have to cover the product rather than this value alone.",
+          "$ref": "#/definitions/resource.Quantity"
+        },
+        "evictionPolicy": {
+          "description": "EvictionPolicy for the primary CPU KV cache tier. Defaults to \"lru\".",
+          "type": "string"
+        },
+        "secondary": {
+          "description": "Secondary is an ordered list of secondary KV cache tiers. vLLM cascades through tiers in the order listed. Currently only fileSystem tiers are supported; the array shape is designed to accommodate object store tiers in a future follow-up without an API break.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1beta1.SecondaryTierSpec"
+          }
+        }
+      }
+    },
     "v1beta1.KernelCacheArtifactCertConfig": {
       "description": "KernelCacheArtifactCertConfig contains certificate signing profile settings.",
       "type": "object",
@@ -4811,6 +5131,316 @@
           "description": "Name is the name of the referenced Role or ClusterRole.",
           "type": "string",
           "default": ""
+        }
+      }
+    },
+    "v1beta1.LLMInferenceService": {
+      "description": "LLMInferenceService is the Schema for the llminferenceservices API, representing a single LLM deployment. It orchestrates the creation of underlying Kubernetes resources like Deployments and Services, and configures networking for exposing the model.",
+      "type": "object",
+      "properties": {
+        "apiVersion": {
+          "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+          "type": "string"
+        },
+        "kind": {
+          "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+          "type": "string"
+        },
+        "metadata": {
+          "default": {},
+          "$ref": "#/definitions/v1.ObjectMeta"
+        },
+        "spec": {
+          "default": {},
+          "$ref": "#/definitions/v1beta1.LLMInferenceServiceSpec"
+        },
+        "status": {
+          "default": {},
+          "$ref": "#/definitions/v1beta1.LLMInferenceServiceStatus"
+        }
+      }
+    },
+    "v1beta1.LLMInferenceServiceConfig": {
+      "description": "LLMInferenceServiceConfig is the Schema for the llminferenceserviceconfigs API. It acts as a template to provide base configurations that can be inherited by multiple LLMInferenceService instances.",
+      "type": "object",
+      "properties": {
+        "apiVersion": {
+          "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+          "type": "string"
+        },
+        "kind": {
+          "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+          "type": "string"
+        },
+        "metadata": {
+          "default": {},
+          "$ref": "#/definitions/v1.ObjectMeta"
+        },
+        "spec": {
+          "default": {},
+          "$ref": "#/definitions/v1beta1.LLMInferenceServiceSpec"
+        },
+        "status": {
+          "default": {},
+          "$ref": "#/definitions/v1beta1.LLMInferenceServiceConfigStatus"
+        }
+      }
+    },
+    "v1beta1.LLMInferenceServiceConfigList": {
+      "description": "LLMInferenceServiceConfigList is the list type for LLMInferenceServiceConfig.",
+      "type": "object",
+      "required": [
+        "items"
+      ],
+      "properties": {
+        "apiVersion": {
+          "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1beta1.LLMInferenceServiceConfig"
+          }
+        },
+        "kind": {
+          "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+          "type": "string"
+        },
+        "metadata": {
+          "default": {},
+          "$ref": "#/definitions/v1.ListMeta"
+        }
+      }
+    },
+    "v1beta1.LLMInferenceServiceConfigStatus": {
+      "description": "LLMInferenceServiceConfigStatus defines the observed state of LLMInferenceServiceConfig.",
+      "type": "object",
+      "properties": {
+        "annotations": {
+          "description": "Annotations is additional Status fields for the Resource to save some additional State as well as convey more information to the user. This is roughly akin to Annotations on any k8s resource, just the reconciler conveying richer information outwards.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "conditions": {
+          "description": "Conditions the latest available observations of a resource's current state.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/knative.Condition"
+          },
+          "x-kubernetes-patch-merge-key": "type",
+          "x-kubernetes-patch-strategy": "merge"
+        },
+        "observedGeneration": {
+          "description": "ObservedGeneration is the 'Generation' of the Service that was last processed by the controller.",
+          "type": "integer",
+          "format": "int64"
+        },
+        "referencedBy": {
+          "description": "ReferencedBy lists the LLMInferenceService instances that reference this config via spec.baseRefs, status.annotations, or implicitly as a well-known default.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1beta1.UntypedObjectReference"
+          },
+          "x-kubernetes-list-type": "atomic"
+        }
+      }
+    },
+    "v1beta1.LLMInferenceServiceList": {
+      "description": "LLMInferenceServiceList is the list type for LLMInferenceService.",
+      "type": "object",
+      "required": [
+        "items"
+      ],
+      "properties": {
+        "apiVersion": {
+          "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1beta1.LLMInferenceService"
+          }
+        },
+        "kind": {
+          "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+          "type": "string"
+        },
+        "metadata": {
+          "default": {},
+          "$ref": "#/definitions/v1.ListMeta"
+        }
+      }
+    },
+    "v1beta1.LLMInferenceServiceSpec": {
+      "description": "LLMInferenceServiceSpec defines the desired state of LLMInferenceService.",
+      "type": "object",
+      "properties": {
+        "annotations": {
+          "description": "Annotations that will be added to the component pod. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "baseRefs": {
+          "description": "BaseRefs allows inheriting and overriding configurations from one or more LLMInferenceServiceConfig instances. The controller merges these base configurations, with the current LLMInferenceService spec taking the highest precedence. When multiple baseRefs are provided, the last one in the list overrides previous ones.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1.LocalObjectReference"
+          }
+        },
+        "kvCacheOffloading": {
+          "description": "KVCacheOffloading configures multi-tier KV cache CPU offloading for this workload. The controller translates this into --kv-transfer-config for the vLLM serve command.",
+          "$ref": "#/definitions/v1beta1.KVCacheOffloadingSpec"
+        },
+        "labels": {
+          "description": "Labels that will be added to the component pod. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "model": {
+          "description": "Model specification, including its URI, potential LoRA adapters, and storage details. It's optional for `LLMInferenceServiceConfig` kind.",
+          "default": {},
+          "$ref": "#/definitions/v1beta1.LLMModelSpec"
+        },
+        "parallelism": {
+          "description": "Parallelism configurations for the runtime, such as tensor and pipeline parallelism. These values are used to configure the underlying inference runtime (e.g., vLLM).",
+          "$ref": "#/definitions/v1beta1.ParallelismSpec"
+        },
+        "prefill": {
+          "description": "Prefill configuration for disaggregated serving. When this section is included, the controller creates a separate deployment for prompt processing (prefill) in addition to the main 'decode' deployment, inspired by the llm-d architecture. This allows for independent scaling and hardware allocation for prefill and decode steps.",
+          "$ref": "#/definitions/v1beta1.WorkloadSpec"
+        },
+        "replicas": {
+          "description": "Number of replicas for the deployment.",
+          "type": "integer",
+          "format": "int32"
+        },
+        "rolloutStrategy": {
+          "description": "RolloutStrategy configures how rolling updates are performed for this workload. When omitted, Kubernetes/LWS defaults apply (maxUnavailable: 25%, maxSurge: 25% for Deployments; maxUnavailable: 1, maxSurge: 0 for LeaderWorkerSets).",
+          "$ref": "#/definitions/v1beta1.RolloutStrategy"
+        },
+        "router": {
+          "description": "Router configuration for how the service is exposed. This section dictates the creation and management of networking resources like Ingress or Gateway API objects (HTTPRoute, Gateway).",
+          "$ref": "#/definitions/v1beta1.RouterSpec"
+        },
+        "runtime": {
+          "description": "Runtime is the name of a ServingRuntime (namespaced) or ClusterServingRuntime that supplies the base container spec — primarily the container image — for the inference workload. The controller resolves this name against ServingRuntime in the LLMInferenceService's namespace first, then falls back to ClusterServingRuntime. The resolved container spec is prepended as the lowest-priority layer in the merge chain, so LLMInferenceServiceConfig baseRefs and spec.template still override it.\n\nWhen omitted, the controller uses the default vLLM template (kserve-config-llm-template) which ships its own image.",
+          "type": "string"
+        },
+        "scaling": {
+          "description": "Scaling configuration for autoscaling this workload. When specified, the controller creates and manages autoscaling resources (ServiceMonitor and the selected actuator — HPA or KEDA ScaledObject) targeting this workload. Mutually exclusive with the static 'replicas' field. In a disaggregated setup, each workload (decode and prefill) can have its own independent scaling configuration, resulting in separate autoscaling resources per workload.",
+          "$ref": "#/definitions/v1beta1.ScalingSpec"
+        },
+        "storageInitializer": {
+          "description": "StorageInitializer configuration for model artifact fetching.",
+          "$ref": "#/definitions/v1beta1.StorageInitializerSpec"
+        },
+        "template": {
+          "description": "Template for the main pod spec. In a multi-node deployment, this configures the \"head\" or \"master\" pod. In a disaggregated deployment, this configures the \"decode\" pod if it's the top-level template, or the \"prefill\" pod if it's within the Prefill block.\n\nFor the storage-initializer init container (named \"storage-initializer\"), users may customize fields such as env, resources, volumeMounts, and image. The container's name, args, and command are controller-managed and any user-provided values for these fields will be overridden. To disable the storage-initializer entirely, use spec.storageInitializer.enabled=false.",
+          "$ref": "#/definitions/v1.PodSpec"
+        },
+        "tracing": {
+          "description": "Tracing configuration for distributed tracing across all managed components. When present (even as `{}`), distributed tracing is enabled with defaults. When omitted, no tracing instrumentation is injected. The controller propagates this configuration to every managed component (inference server and scheduler), automatically adjusting the service name per component (e.g. \"-decode\"/\"-prefill\" suffix for inference servers, \"inference-scheduler\" for the scheduler).",
+          "$ref": "#/definitions/v1beta1.TracingSpec"
+        },
+        "worker": {
+          "description": "Worker configuration for multi-node deployments. The presence of this field triggers the creation of a multi-node (distributed) setup. This spec defines the configuration for the worker pods, while the main 'Template' field defines the head pod. The controller is responsible for enabling discovery between head and worker pods.",
+          "$ref": "#/definitions/v1.PodSpec"
+        }
+      }
+    },
+    "v1beta1.LLMInferenceServiceStatus": {
+      "description": "LLMInferenceServiceStatus defines the observed state of LLMInferenceService.",
+      "type": "object",
+      "properties": {
+        "address": {
+          "description": "Deprecated: Address is retained for CRD schema compatibility. It is never populated; use Addresses instead.",
+          "$ref": "#/definitions/knative.Addressable"
+        },
+        "addresses": {
+          "description": "Addresses lists the network endpoints where the service is reachable. Each address may include an origin reference identifying the networking resource that produced it.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1beta1.SourcedAddress"
+          },
+          "x-kubernetes-list-type": "atomic"
+        },
+        "annotations": {
+          "description": "Annotations is additional Status fields for the Resource to save some additional State as well as convey more information to the user. This is roughly akin to Annotations on any k8s resource, just the reconciler conveying richer information outwards.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "appliedConfigs": {
+          "description": "AppliedConfigRefs records which resources were applied during the last successful reconciliation, in merge precedence order. Well-known configs (determined by the deployment pattern) appear first with lower precedence, followed by explicitly referenced baseRefs with higher precedence. The service's own spec always takes the highest precedence but is not listed here. Atomic because the controller always writes the full list and ordering encodes merge precedence.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1beta1.AppliedConfigRef"
+          },
+          "x-kubernetes-list-type": "atomic"
+        },
+        "conditions": {
+          "description": "Conditions the latest available observations of a resource's current state.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/knative.Condition"
+          },
+          "x-kubernetes-patch-merge-key": "type",
+          "x-kubernetes-patch-strategy": "merge"
+        },
+        "observedGeneration": {
+          "description": "ObservedGeneration is the 'Generation' of the Service that was last processed by the controller.",
+          "type": "integer",
+          "format": "int64"
+        },
+        "router": {
+          "description": "Router records the observed networking topology for this service. Nil when routing is not configured or the service is stopped.",
+          "$ref": "#/definitions/v1beta1.RouterStatus"
+        },
+        "url": {
+          "description": "URL is the primary address for accessing the service. It is set to an external (public) address when available, otherwise it is promoted from the first discovered address (which may be cluster-local or private) for easy discovery.",
+          "$ref": "#/definitions/knative.URL"
+        },
+        "workloads": {
+          "description": "Workloads records the observed workload resources for this service.",
+          "$ref": "#/definitions/v1beta1.WorkloadStatus"
+        }
+      }
+    },
+    "v1beta1.LLMInferenceServiceValidator": {
+      "description": "LLMInferenceServiceValidator is responsible for validating the LLMInferenceService resource when it is created, updated, or deleted.",
+      "type": "object"
+    },
+    "v1beta1.LLMModelSpec": {
+      "description": "ConfidentialSpec enables confidential model serving with encrypted model artifacts. When enabled, the storage initializer will decrypt model files using keys obtained from a Key Broker Service (KBS) via TEE attestation.",
+      "type": "object",
+      "required": [
+        "uri"
+      ],
+      "properties": {
+        "confidential": {
+          "description": "Confidential enables confidential model serving with encrypted model artifacts. When enabled, the storage initializer decrypts model files using keys obtained from a Key Broker Service (KBS) via TEE attestation.",
+          "$ref": "#/definitions/v1beta1.ConfidentialSpec"
+        },
+        "lora": {
+          "description": "LoRA (Low-Rank Adaptation) adapters configurations. Allows for specifying one or more LoRA adapters to be applied to the base model.",
+          "$ref": "#/definitions/v1beta1.LoRASpec"
+        },
+        "name": {
+          "description": "Name is the name of the model as it will be set in the \"model\" parameter for an incoming request. If omitted, it will default to `metadata.name`. For LoRA adapters, this field is required.",
+          "type": "string"
+        },
+        "uri": {
+          "description": "URI of the model, specifying its location, e.g., hf://meta-llama/Llama-4-Scout-17B-16E-Instruct The storage-initializer init container uses this URI to download the model.",
+          "$ref": "#/definitions/knative.URL"
         }
       }
     },
@@ -4996,6 +5626,34 @@
         "workingDir": {
           "description": "Container's working directory. If not specified, the container runtime's default will be used, which might be configured in the container image. Cannot be updated.",
           "type": "string"
+        }
+      }
+    },
+    "v1beta1.LoRASpec": {
+      "description": "LoRASpec defines the configuration for LoRA adapters.",
+      "type": "object",
+      "properties": {
+        "adapters": {
+          "description": "Adapters is a list of LoRA (Low-Rank Adaptation) adapters to attach to the base model. Each adapter is specified by name and URI (supports hf://, s3://, and pvc:// schemes). The controller automatically downloads adapters and configures the runtime to use them. This type is recursive https://github.com/kubernetes-sigs/controller-tools/issues/585",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1beta1.LLMModelSpec"
+          }
+        },
+        "maxAdapters": {
+          "description": "MaxAdapters is the maximum number of LoRA adapters that can be loaded simultaneously (maps to vLLM --max-loras). Defaults to the number of configured adapters.",
+          "type": "integer",
+          "format": "int32"
+        },
+        "maxCpuAdapters": {
+          "description": "MaxCpuAdapters is the maximum number of LoRA adapters stored in CPU memory (maps to vLLM --max-cpu-loras). Defaults to the number of configured adapters.",
+          "type": "integer",
+          "format": "int32"
+        },
+        "maxRank": {
+          "description": "MaxRank is the maximum LoRA rank supported by the runtime (maps to vLLM --max-lora-rank). Higher values allow adapters with higher rank but increase memory usage. If not set, vLLM's default applies (16).",
+          "type": "integer",
+          "format": "int32"
         }
       }
     },
@@ -5203,6 +5861,15 @@
         },
         "targetModelState": {
           "type": "string"
+        }
+      }
+    },
+    "v1beta1.ModelSourcedAddressStatus": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "default": ""
         }
       }
     },
@@ -5648,6 +6315,95 @@
         }
       }
     },
+    "v1beta1.ObservedGateway": {
+      "description": "ObservedGateway is a Gateway reference with the listeners and HTTPRoutes bound to this service through it. Used in status to record observed routing topology.",
+      "type": "object",
+      "required": [
+        "group",
+        "kind",
+        "name"
+      ],
+      "properties": {
+        "group": {
+          "description": "Group is the group of the referent. For example, \"gateway.networking.k8s.io\". When set to the empty string, core API group is inferred.",
+          "type": "string",
+          "default": ""
+        },
+        "httpRoutes": {
+          "description": "HTTPRoutes lists the HTTPRoutes bound to this service through this Gateway.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/sigs.k8s.io.gateway-api.apis.v1.ObjectReference"
+          },
+          "x-kubernetes-list-type": "atomic"
+        },
+        "kind": {
+          "description": "Kind is kind of the referent. For example \"ConfigMap\" or \"Service\".",
+          "type": "string",
+          "default": ""
+        },
+        "listeners": {
+          "description": "Listeners lists the SectionNames of the Gateway listeners that accepted routes from this service. Nil means the route targets all listeners (no SectionName was specified on the parentRef).",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-kubernetes-list-type": "atomic"
+        },
+        "name": {
+          "description": "Name is the name of the referent.",
+          "type": "string",
+          "default": ""
+        },
+        "namespace": {
+          "description": "Namespace is the namespace of the referenced object. When unspecified, the local namespace is inferred.\n\nNote that when a namespace different than the local namespace is specified, a ReferenceGrant object is required in the referent namespace to allow that namespace's owner to accept the reference. See the ReferenceGrant documentation for details.\n\nSupport: Core",
+          "type": "string"
+        }
+      }
+    },
+    "v1beta1.ObservedSchedulerStatus": {
+      "description": "ObservedSchedulerStatus records the scheduler-related resources observed during the last successful routing reconciliation.",
+      "type": "object",
+      "properties": {
+        "inferencePool": {
+          "description": "InferencePool is the InferencePool observed as active for this service.",
+          "$ref": "#/definitions/sigs.k8s.io.gateway-api.apis.v1.ObjectReference"
+        },
+        "service": {
+          "description": "Service is the EPP Service observed for this service.",
+          "$ref": "#/definitions/sigs.k8s.io.gateway-api.apis.v1.ObjectReference"
+        }
+      }
+    },
+    "v1beta1.ObservedWorkloadStatus": {
+      "description": "ObservedWorkloadStatus identifies a workload resource and its observed replica state.",
+      "type": "object",
+      "required": [
+        "kind",
+        "name"
+      ],
+      "properties": {
+        "apiGroup": {
+          "description": "APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required.",
+          "type": "string"
+        },
+        "kind": {
+          "description": "Kind is the type of resource being referenced",
+          "type": "string",
+          "default": ""
+        },
+        "name": {
+          "description": "Name is the name of resource being referenced",
+          "type": "string",
+          "default": ""
+        },
+        "readyReplicas": {
+          "description": "ReadyReplicas is the number of pods available to serve traffic. Copied from the workload's status on each reconcile.",
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
     "v1beta1.OtelCollectorConfig": {
       "type": "object",
       "properties": {
@@ -5851,6 +6607,35 @@
         }
       }
     },
+    "v1beta1.PVCRefTierSpec": {
+      "description": "PVCRefTierSpec mounts a pre-existing user-managed PVC as a KV cache tier.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Name of the pre-existing PersistentVolumeClaim.",
+          "type": "string",
+          "default": ""
+        },
+        "path": {
+          "description": "Path is a subdirectory within the PVC used as VolumeMount.subPath.",
+          "type": "string"
+        }
+      }
+    },
+    "v1beta1.PVCTierSpec": {
+      "description": "PVCTierSpec configures a PVC-backed KV cache tier. Exactly one of Spec or Ref must be set.",
+      "type": "object",
+      "properties": {
+        "ref": {
+          "description": "Ref mounts a pre-existing user-managed PVC as the disk cache. The PVC must already exist. For a cache shared across replicas, provision an RWX PVC; for per-pod persistent cache, provision a separate PVC per pod and reference it by name.",
+          "$ref": "#/definitions/v1beta1.PVCRefTierSpec"
+        },
+        "spec": {
+          "description": "Spec creates one ephemeral PVC per pod automatically. The PVC is owned by the pod and deleted when the pod is deleted — it does not survive pod restarts.",
+          "$ref": "#/definitions/v1.PersistentVolumeClaimSpec"
+        }
+      }
+    },
     "v1beta1.PaddleServerSpec": {
       "type": "object",
       "properties": {
@@ -6032,6 +6817,41 @@
         "workingDir": {
           "description": "Container's working directory. If not specified, the container runtime's default will be used, which might be configured in the container image. Cannot be updated.",
           "type": "string"
+        }
+      }
+    },
+    "v1beta1.ParallelismSpec": {
+      "description": "TracingSpec defines the distributed tracing configuration. When present (even as an empty object `{}`), tracing is enabled with sensible defaults. When omitted, no tracing instrumentation is injected.\n\nExample - Enable tracing with defaults:\n\n\ttracing: {}\n\nExample - Custom configuration:\n\n\ttracing:\n\t  exporterEndpoint: \"http://my-collector:4317\"\n\t  sampler: \"parentbased_traceidratio\"\n\t  samplerArg: \"0.1\"\n\t  exporter: \"otlp\"",
+      "type": "object",
+      "properties": {
+        "data": {
+          "description": "Data parallelism size.",
+          "type": "integer",
+          "format": "int32"
+        },
+        "dataLocal": {
+          "description": "DataLocal data local parallelism size.",
+          "type": "integer",
+          "format": "int32"
+        },
+        "dataRPCPort": {
+          "description": "DataRPCPort is the data parallelism RPC port.",
+          "type": "integer",
+          "format": "int32"
+        },
+        "expert": {
+          "description": "Expert enables expert parallelism.",
+          "type": "boolean"
+        },
+        "pipeline": {
+          "description": "Pipeline parallelism size.",
+          "type": "integer",
+          "format": "int32"
+        },
+        "tensor": {
+          "description": "Tensor parallelism size.",
+          "type": "integer",
+          "format": "int32"
         }
       }
     },
@@ -6979,6 +7799,64 @@
         }
       }
     },
+    "v1beta1.RolloutStrategy": {
+      "description": "RolloutStrategy configures the rolling update behavior for a workload. These settings apply to both Deployment and LeaderWorkerSet resources created by the controller.",
+      "type": "object",
+      "properties": {
+        "maxSurge": {
+          "description": "MaxSurge specifies the maximum number of replicas that can be scheduled above the desired number of replicas during a rolling update. Value can be an absolute number (ex: 5) or a percentage of total replicas (ex: \"50%\"). Defaults to 25% for Deployments, 0 for LeaderWorkerSets when not set.",
+          "$ref": "#/definitions/k8s.io.apimachinery.pkg.util.intstr.IntOrString"
+        },
+        "maxUnavailable": {
+          "description": "MaxUnavailable specifies the maximum number of replicas that can be unavailable during a rolling update. Value can be an absolute number (ex: 5) or a percentage of total replicas (ex: \"50%\"). Defaults to 25% for Deployments, 1 for LeaderWorkerSets when not set.",
+          "$ref": "#/definitions/k8s.io.apimachinery.pkg.util.intstr.IntOrString"
+        }
+      }
+    },
+    "v1beta1.RouterSpec": {
+      "description": "RouterSpec defines the routing configuration for exposing the service. It supports Kubernetes Ingress and the Gateway API. The fields are mutually exclusive.",
+      "type": "object",
+      "properties": {
+        "gateway": {
+          "description": "Gateway configuration for the Gateway API, mutually exclusive with Ingress. If an empty object `{}` is provided, the controller uses a default Gateway. This must be used in conjunction with the 'Route' field for managed Gateway API resources.",
+          "$ref": "#/definitions/v1beta1.GatewaySpec"
+        },
+        "ingress": {
+          "description": "Ingress configuration. This is mutually exclusive with Route and Gateway. If an empty object `{}` is provided, the controller creates and manages a default Ingress resource.",
+          "$ref": "#/definitions/v1beta1.IngressSpec"
+        },
+        "route": {
+          "description": "Route configuration for the Gateway API. If an empty object `{}` is provided, the controller creates and manages a new HTTPRoute.",
+          "$ref": "#/definitions/v1beta1.GatewayRoutesSpec"
+        },
+        "scheduler": {
+          "description": "Scheduler configuration for the Inference Gateway extension. If this field is non-empty, an InferenceModel resource will be created to integrate with the gateway's scheduler.",
+          "$ref": "#/definitions/v1beta1.SchedulerSpec"
+        }
+      }
+    },
+    "v1beta1.RouterStatus": {
+      "description": "RouterStatus records the networking resources observed during the last successful routing reconciliation. Nil when routing is not configured or the service is stopped.",
+      "type": "object",
+      "properties": {
+        "gateways": {
+          "description": "Gateways lists the Gateway resources observed as attached to this service, each with the listeners and HTTPRoutes bound through them.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1beta1.ObservedGateway"
+          },
+          "x-kubernetes-list-type": "atomic"
+        },
+        "group": {
+          "description": "Group reports the observed routing group topology. Nil when this LLMISVC is not part of a routing group.",
+          "$ref": "#/definitions/v1beta1.GroupStatus"
+        },
+        "scheduler": {
+          "description": "Scheduler records the observed scheduler topology. Nil when the scheduler is not configured.",
+          "$ref": "#/definitions/v1beta1.ObservedSchedulerStatus"
+        }
+      }
+    },
     "v1beta1.SKLearnSpec": {
       "description": "SKLearnSpec defines arguments for configuring SKLearn model serving.",
       "type": "object",
@@ -7164,6 +8042,98 @@
         }
       }
     },
+    "v1beta1.ScalingSpec": {
+      "description": "ScalingSpec configures autoscaling for the LLM inference deployment. When scaling is configured, the controller creates and manages autoscaling resources (ServiceMonitor and the selected actuator — HPA or KEDA ScaledObject). Direct KEDA scaling uses user-defined triggers. The deprecated WVA fields are retained only so existing resources can be decoded during upgrades; new WVA configuration is rejected.",
+      "type": "object",
+      "required": [
+        "maxReplicas"
+      ],
+      "properties": {
+        "keda": {
+          "description": "KEDA configures direct KEDA scaling without WVA. Users specify their own triggers (CPU, Prometheus, queue depth, etc.) and the controller creates a ScaledObject with those triggers.",
+          "$ref": "#/definitions/v1beta1.DirectKEDAScalingSpec"
+        },
+        "maxReplicas": {
+          "description": "MaxReplicas is the maximum number of replicas for the deployment.",
+          "type": "integer",
+          "format": "int32",
+          "default": 0
+        },
+        "minReplicas": {
+          "description": "MinReplicas is the minimum number of replicas for the deployment during active scaling. This is the scaling floor when triggers are active. For idle scale-down, use KEDA's idleReplicaCount instead. Defaults to 1 if not specified.",
+          "type": "integer",
+          "format": "int32"
+        },
+        "wva": {
+          "description": "WVA is deprecated and retained only for decoding existing resources during upgrades. Existing WVA configuration is not reconciled and new WVA configuration is rejected.",
+          "$ref": "#/definitions/v1beta1.WVASpec"
+        }
+      }
+    },
+    "v1beta1.SchedulerConfigSpec": {
+      "type": "object",
+      "properties": {
+        "inline": {
+          "description": "Inline EndpointPickerConfig",
+          "$ref": "#/definitions/k8s.io.apimachinery.pkg.runtime.RawExtension"
+        },
+        "ref": {
+          "description": "Ref is a reference to a ConfigMap key with EndpointPickerConfig.",
+          "$ref": "#/definitions/v1.ConfigMapKeySelector"
+        }
+      }
+    },
+    "v1beta1.SchedulerSpec": {
+      "description": "SchedulerSpec defines the Inference Gateway extension configuration.\n\nThe SchedulerSpec configures the connection from the Gateway to the model deployment leveraging the LLM optimized request Scheduler, also known as the Endpoint Picker (EPP). The EPP determines the exact pod that should handle the request and responds back to the Gateway with the target pod. The Gateway will then forward the request to the chosen pod.\n\nThe Scheduler is only effective when having multiple inference pod replicas.\n\nStep 1 (endpoint selection): Gateway \u003c-- ExtProc --\u003e EPP (select the optimal replica to handle the request) Step 2 (endpoint routing): Gateway \u003c-- forward request/response --\u003e Inference Pod X",
+      "type": "object",
+      "properties": {
+        "annotations": {
+          "description": "Annotations that will be added to the scheduler component pod. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "config": {
+          "description": "Config is the configuration for the EndpointPicker.",
+          "$ref": "#/definitions/v1beta1.SchedulerConfigSpec"
+        },
+        "labels": {
+          "description": "Labels that will be added to the scheduler component pod. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "pool": {
+          "description": "Pool configuration for the InferencePool, which is part of the Inference Gateway extension.",
+          "$ref": "#/definitions/v1beta1.InferencePoolSpec"
+        },
+        "replicas": {
+          "description": "Replicas is the number of replicas for the scheduler.",
+          "type": "integer",
+          "format": "int32"
+        },
+        "template": {
+          "description": "Template for the Inference Gateway Extension pod spec. This configures the Endpoint Picker (EPP) Deployment.",
+          "$ref": "#/definitions/v1.PodSpec"
+        },
+        "tokenizer": {
+          "description": "Tokenizer provides optional operational overrides for the standalone tokenizer deployment that serves the vLLM render endpoint (/v1/completions/render) over HTTP. The tokenizer is auto-deployed when token-producer or precise-prefix-cache-scorer plugins are detected in the scheduler config.inline. Use this field to customize the tokenizer pod template (resources, image overrides, etc.).",
+          "$ref": "#/definitions/v1beta1.TokenizerSpec"
+        }
+      }
+    },
+    "v1beta1.SecondaryTierSpec": {
+      "description": "SecondaryTierSpec defines one secondary KV cache tier. Exactly one field must be set.",
+      "type": "object",
+      "properties": {
+        "fileSystem": {
+          "description": "FileSystem configures a POSIX disk tier backed by a Kubernetes volume.",
+          "$ref": "#/definitions/v1beta1.FileSystemTierSpec"
+        }
+      }
+    },
     "v1beta1.SecurityConfig": {
       "type": "object",
       "required": [
@@ -7181,6 +8151,47 @@
       "properties": {
         "serviceClusterIPNone": {
           "description": "ServiceClusterIPNone is a boolean flag to indicate if the service should have a clusterIP set to None. If the DeploymentMode is Raw, the default value for ServiceClusterIPNone is false when the value is absent.",
+          "type": "boolean"
+        }
+      }
+    },
+    "v1beta1.SourcedAddress": {
+      "description": "SourcedAddress extends Addressable with the networking resource that produced this address, enabling consumers to select endpoints by origin.",
+      "type": "object",
+      "properties": {
+        "CACerts": {
+          "description": "CACerts is the Certification Authority (CA) certificates in PEM format according to https://www.rfc-editor.org/rfc/rfc7468.",
+          "type": "string"
+        },
+        "audience": {
+          "description": "Audience is the OIDC audience for this address.",
+          "type": "string"
+        },
+        "models": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1beta1.ModelSourcedAddressStatus"
+          }
+        },
+        "name": {
+          "description": "Name is the name of the address.",
+          "type": "string"
+        },
+        "origin": {
+          "description": "Origin identifies the networking resource (e.g., Gateway) that produced this address. Nil when the origin is unknown or when the address was converted from an older API version.",
+          "$ref": "#/definitions/sigs.k8s.io.gateway-api.apis.v1.ObjectReference"
+        },
+        "url": {
+          "$ref": "#/definitions/knative.URL"
+        }
+      }
+    },
+    "v1beta1.StorageInitializerSpec": {
+      "description": "StorageInitializerSpec defines the configuration for the storage initializer. The storage initializer is an initContainer responsible for downloading model artifacts from remote storage (s3://, hf://) before the main container starts.\n\nExample - Disable storage initializer:\n\n\tstorageInitializer:\n\t  enabled: false\n\nExample - Explicitly enable (same as default):\n\n\tstorageInitializer:\n\t  enabled: true",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "description": "Enabled controls whether the storage-initializer initContainer is created. When nil or true, storage-initializer is created for applicable URIs (s3://, hf://). When explicitly set to false, storage-initializer creation is skipped. This is useful when models are pre-loaded via alternative mechanisms (e.g., custom init containers, modelcars). Default: true (nil is treated as true for backward compatibility)",
           "type": "boolean"
         }
       }
@@ -7405,6 +8416,16 @@
         "workingDir": {
           "description": "Container's working directory. If not specified, the container runtime's default will be used, which might be configured in the container image. Cannot be updated.",
           "type": "string"
+        }
+      }
+    },
+    "v1beta1.TokenizerSpec": {
+      "description": "TokenizerSpec configures a standalone tokenizer deployment.",
+      "type": "object",
+      "properties": {
+        "template": {
+          "description": "Template for the tokenizer pod spec. This is merged on top of the well-known tokenizer config defaults (vLLM render container).",
+          "$ref": "#/definitions/v1.PodSpec"
         }
       }
     },
@@ -8137,6 +9158,36 @@
         }
       }
     },
+    "v1beta1.UntypedObjectReference": {
+      "description": "UntypedObjectReference is a reference to an object without a specific Group/Version/Kind. It's used for referencing networking resources like Ingresses where the exact type might be inferred or is not strictly required by this controller.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Name of the referenced object.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Namespace of the referenced object.",
+          "type": "string"
+        }
+      }
+    },
+    "v1beta1.WVASpec": {
+      "description": "WVASpec is the deprecated Workload Variant Autoscaler configuration retained for upgrade compatibility. New WVA configuration is rejected and existing WVA configuration is not reconciled.",
+      "type": "object",
+      "properties": {
+        "hpa": {
+          "$ref": "#/definitions/v1beta1.HPAScalingSpec"
+        },
+        "keda": {
+          "$ref": "#/definitions/v1beta1.KEDAScalingSpec"
+        },
+        "variantCost": {
+          "description": "VariantCost specifies the cost per replica for this variant (used in saturation analysis).",
+          "type": "string"
+        }
+      }
+    },
     "v1beta1.WorkerSpec": {
       "type": "object",
       "properties": {
@@ -8404,6 +9455,77 @@
           },
           "x-kubernetes-patch-merge-key": "name",
           "x-kubernetes-patch-strategy": "merge,retainKeys"
+        }
+      }
+    },
+    "v1beta1.WorkloadSpec": {
+      "description": "WorkloadSpec defines the configuration for a deployment workload, such as replicas and pod specifications.",
+      "type": "object",
+      "properties": {
+        "annotations": {
+          "description": "Annotations that will be added to the component pod. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "kvCacheOffloading": {
+          "description": "KVCacheOffloading configures multi-tier KV cache CPU offloading for this workload. The controller translates this into --kv-transfer-config for the vLLM serve command.",
+          "$ref": "#/definitions/v1beta1.KVCacheOffloadingSpec"
+        },
+        "labels": {
+          "description": "Labels that will be added to the component pod. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "parallelism": {
+          "description": "Parallelism configurations for the runtime, such as tensor and pipeline parallelism. These values are used to configure the underlying inference runtime (e.g., vLLM).",
+          "$ref": "#/definitions/v1beta1.ParallelismSpec"
+        },
+        "replicas": {
+          "description": "Number of replicas for the deployment.",
+          "type": "integer",
+          "format": "int32"
+        },
+        "rolloutStrategy": {
+          "description": "RolloutStrategy configures how rolling updates are performed for this workload. When omitted, Kubernetes/LWS defaults apply (maxUnavailable: 25%, maxSurge: 25% for Deployments; maxUnavailable: 1, maxSurge: 0 for LeaderWorkerSets).",
+          "$ref": "#/definitions/v1beta1.RolloutStrategy"
+        },
+        "scaling": {
+          "description": "Scaling configuration for autoscaling this workload. When specified, the controller creates and manages autoscaling resources (ServiceMonitor and the selected actuator — HPA or KEDA ScaledObject) targeting this workload. Mutually exclusive with the static 'replicas' field. In a disaggregated setup, each workload (decode and prefill) can have its own independent scaling configuration, resulting in separate autoscaling resources per workload.",
+          "$ref": "#/definitions/v1beta1.ScalingSpec"
+        },
+        "template": {
+          "description": "Template for the main pod spec. In a multi-node deployment, this configures the \"head\" or \"master\" pod. In a disaggregated deployment, this configures the \"decode\" pod if it's the top-level template, or the \"prefill\" pod if it's within the Prefill block.\n\nFor the storage-initializer init container (named \"storage-initializer\"), users may customize fields such as env, resources, volumeMounts, and image. The container's name, args, and command are controller-managed and any user-provided values for these fields will be overridden. To disable the storage-initializer entirely, use spec.storageInitializer.enabled=false.",
+          "$ref": "#/definitions/v1.PodSpec"
+        },
+        "worker": {
+          "description": "Worker configuration for multi-node deployments. The presence of this field triggers the creation of a multi-node (distributed) setup. This spec defines the configuration for the worker pods, while the main 'Template' field defines the head pod. The controller is responsible for enabling discovery between head and worker pods.",
+          "$ref": "#/definitions/v1.PodSpec"
+        }
+      }
+    },
+    "v1beta1.WorkloadStatus": {
+      "description": "WorkloadStatus records the workload resources observed during the last successful reconciliation. Nil when no workload resources have been created yet, or when the service is stopped.",
+      "type": "object",
+      "properties": {
+        "prefill": {
+          "description": "Prefill is the prefill workload in disaggregated serving mode. Nil when disaggregated serving is not configured. A service on the DisaggregatedSet backend references the same DisaggregatedSet as Primary, with the ready replicas of the prefill role.",
+          "$ref": "#/definitions/v1beta1.ObservedWorkloadStatus"
+        },
+        "primary": {
+          "description": "Primary is the main inference workload (Deployment or LeaderWorkerSet). When disaggregated serving is configured, this workload handles the decode phase; otherwise it handles both prefill and decode. A service on the DisaggregatedSet backend references its DisaggregatedSet here, with the ready replicas of the decode role.",
+          "$ref": "#/definitions/v1beta1.ObservedWorkloadStatus"
+        },
+        "scheduler": {
+          "description": "Scheduler is the EPP scheduler Deployment. Nil when the scheduler is not configured.",
+          "$ref": "#/definitions/v1beta1.ObservedWorkloadStatus"
+        },
+        "service": {
+          "description": "Service is the Kubernetes Service fronting the primary inference workload.",
+          "$ref": "#/definitions/v1.TypedLocalObjectReference"
         }
       }
     },

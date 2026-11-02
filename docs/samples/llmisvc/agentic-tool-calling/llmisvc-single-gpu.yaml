@@ -3,7 +3,7 @@
 # Model: Qwen3-Coder-30B-A3B-Instruct-FP8 (supports tool calling via qwen3_coder parser)
 # Topology: Single node, no P/D disaggregation
 # Requires: 1x GPU node, HF token secret
-apiVersion: serving.kserve.io/v1alpha2
+apiVersion: serving.kserve.io/v1beta1
 kind: LLMInferenceService
 metadata:
   name: qwen3-coder-tool-calling

@@ -1,4 +1,4 @@
-apiVersion: serving.kserve.io/v1alpha2
+apiVersion: serving.kserve.io/v1beta1
 kind: LLMInferenceServiceConfig
 metadata:
   annotations:
@@ -342,7 +342,7 @@ spec:
       secret:
         secretName: '{{ ChildName .ObjectMeta.Name `-kserve-self-signed-certs` }}'
 ---
-apiVersion: serving.kserve.io/v1alpha2
+apiVersion: serving.kserve.io/v1beta1
 kind: LLMInferenceServiceConfig
 metadata:
   annotations:
@@ -1004,7 +1004,7 @@ spec:
       secret:
         secretName: '{{ ChildName .ObjectMeta.Name `-kserve-self-signed-certs` }}'
 ---
-apiVersion: serving.kserve.io/v1alpha2
+apiVersion: serving.kserve.io/v1beta1
 kind: LLMInferenceServiceConfig
 metadata:
   name: kserve-config-llm-omni-template
@@ -1031,7 +1031,7 @@ spec:
         periodSeconds: 30
         timeoutSeconds: 10
 ---
-apiVersion: serving.kserve.io/v1alpha2
+apiVersion: serving.kserve.io/v1beta1
 kind: LLMInferenceServiceConfig
 metadata:
   annotations:
@@ -1315,7 +1315,7 @@ spec:
         secret:
           secretName: '{{ ChildName .ObjectMeta.Name `-kserve-self-signed-certs` }}'
 ---
-apiVersion: serving.kserve.io/v1alpha2
+apiVersion: serving.kserve.io/v1beta1
 kind: LLMInferenceServiceConfig
 metadata:
   annotations:
@@ -1914,7 +1914,7 @@ spec:
         secret:
           secretName: '{{ ChildName .ObjectMeta.Name `-kserve-self-signed-certs` }}'
 ---
-apiVersion: serving.kserve.io/v1alpha2
+apiVersion: serving.kserve.io/v1beta1
 kind: LLMInferenceServiceConfig
 metadata:
   name: kserve-config-llm-router-route
@@ -2354,7 +2354,7 @@ spec:
               backendRequest: 0s
               request: 0s
 ---
-apiVersion: serving.kserve.io/v1alpha2
+apiVersion: serving.kserve.io/v1beta1
 kind: LLMInferenceServiceConfig
 metadata:
   name: kserve-config-llm-scheduler
@@ -2473,7 +2473,7 @@ spec:
             secretName: '{{ ChildName .ObjectMeta.Name `-kserve-self-signed-certs`
               }}'
 ---
-apiVersion: serving.kserve.io/v1alpha2
+apiVersion: serving.kserve.io/v1beta1
 kind: LLMInferenceServiceConfig
 metadata:
   name: kserve-config-llm-scheduler-eppconfig-default
@@ -2496,7 +2496,7 @@ spec:
             - pluginRef: prefix-cache-affinity-filter
             - pluginRef: token-load-scorer
 ---
-apiVersion: serving.kserve.io/v1alpha2
+apiVersion: serving.kserve.io/v1beta1
 kind: LLMInferenceServiceConfig
 metadata:
   name: kserve-config-llm-scheduler-eppconfig-default-pd
@@ -2535,7 +2535,7 @@ spec:
             - pluginRef: active-request-scorer
             - pluginRef: max-score-picker
 ---
-apiVersion: serving.kserve.io/v1alpha2
+apiVersion: serving.kserve.io/v1beta1
 kind: LLMInferenceServiceConfig
 metadata:
   name: kserve-config-llm-scheduler-eppconfig-modality
@@ -2556,7 +2556,7 @@ spec:
             - pluginRef: active-request-scorer
             - pluginRef: max-score-picker
 ---
-apiVersion: serving.kserve.io/v1alpha2
+apiVersion: serving.kserve.io/v1beta1
 kind: LLMInferenceServiceConfig
 metadata:
   annotations:
@@ -2820,7 +2820,7 @@ spec:
       secret:
         secretName: '{{ ChildName .ObjectMeta.Name `-kserve-self-signed-certs` }}'
 ---
-apiVersion: serving.kserve.io/v1alpha2
+apiVersion: serving.kserve.io/v1beta1
 kind: LLMInferenceServiceConfig
 metadata:
   name: kserve-config-llm-tokenizer
@@ -2899,7 +2899,7 @@ spec:
               secretName: '{{ ChildName .ObjectMeta.Name `-kserve-self-signed-certs`
                 }}'
 ---
-apiVersion: serving.kserve.io/v1alpha2
+apiVersion: serving.kserve.io/v1beta1
 kind: LLMInferenceServiceConfig
 metadata:
   name: kserve-config-llm-tracing
@@ -2911,7 +2911,7 @@ spec:
     sampler: parentbased_traceidratio
     samplerArg: "0.05"
 ---
-apiVersion: serving.kserve.io/v1alpha2
+apiVersion: serving.kserve.io/v1beta1
 kind: LLMInferenceServiceConfig
 metadata:
   annotations:
@@ -3473,7 +3473,7 @@ spec:
       secret:
         secretName: '{{ ChildName .ObjectMeta.Name `-kserve-self-signed-certs` }}'
 ---
-apiVersion: serving.kserve.io/v1alpha2
+apiVersion: serving.kserve.io/v1beta1
 kind: LLMInferenceServiceConfig
 metadata:
   name: kserve-config-sglang-template

@@ -72,9 +72,11 @@ def test_get_installed_version_uses_module_package(monkeypatch):
     mock_cls.__module__ = "autogluon.tabular.predictor.predictor"
     monkeypatch.setattr(
         "autogluonserver.version_compat.importlib.metadata.version",
-        lambda pkg: "1.5.1"
-        if pkg == "autogluon.tabular"
-        else (_ for _ in ()).throw(Exception()),
+        lambda pkg: (
+            "1.5.1"
+            if pkg == "autogluon.tabular"
+            else (_ for _ in ()).throw(Exception())
+        ),
     )
     assert _get_installed_version(mock_cls) == Version("1.5.1")
 

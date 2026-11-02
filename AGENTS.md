@@ -51,7 +51,7 @@ envtest runs a real API server and etcd but NOT built-in controllers (Deployment
 - Suites use Ginkgo/Gomega (`ginkgo.RunSpecs`, `It()`, `Context()`, `BeforeSuite()`)
 - Use `pkgtest.NewEnvTest()` from `pkg/testing/` to set up suites - not raw `envtest.Environment{}`. The returned `*pkgtest.Client` wraps the K8s client, environment, and cleanup
 - Check `pkg/testing/` for existing Gomega matchers (`BeOwnedBy`, `HaveCondition`, etc.) before writing new ones
-- llmisvc has its own `fixture/` package (`pkg/controller/v1alpha2/llmisvc/fixture/`) with builders and envtest setup
+- llmisvc has its own `fixture/` package (`pkg/controller/llmisvc/fixture/`) with builders and envtest setup
 
 **Isolation and cleanup:**
 - Each test creates its own namespace

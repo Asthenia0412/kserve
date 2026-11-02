@@ -6,11 +6,12 @@ To test the [Scikit-Learn](https://scikit-learn.org/stable/) server, first we ne
 from sklearn import svm
 from sklearn import datasets
 from joblib import dump
-clf = svm.SVC(gamma='scale')
+
+clf = svm.SVC(gamma="scale")
 iris = datasets.load_iris()
 X, y = iris.data, iris.target
 clf.fit(X, y)
-dump(clf, 'model.joblib')
+dump(clf, "model.joblib")
 ```
 
 Then, we can install and run the [SKLearn Server](/python/sklearnserver) using the generated model and test for prediction. Models can be on local filesystem, S3 compatible object storage, Azure Blob Storage, or Google Cloud Storage.
@@ -25,12 +26,11 @@ We can also use the inbuilt sklearn support for sample datasets and do some simp
 ```python
 from sklearn import datasets
 import requests
+
 iris = datasets.load_iris()
 X, y = iris.data, iris.target
-formData = {
-    'instances': X[0:1].tolist()
-}
-res = requests.post('http://localhost:8080/v1/models/svm:predict', json=formData)
+formData = {"instances": X[0:1].tolist()}
+res = requests.post("http://localhost:8080/v1/models/svm:predict", json=formData)
 print(res)
 print(res.text)
 ```

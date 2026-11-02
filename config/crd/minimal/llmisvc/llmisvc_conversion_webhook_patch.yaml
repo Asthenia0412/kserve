@@ -1,5 +1,5 @@
 # Patch to add conversion webhook configuration to LLMInferenceService CRD
-# This enables automatic v1alpha1 <-> v1alpha2 API version conversion
+# This enables automatic conversion across v1alpha1, v1alpha2, and v1beta1 (Hub) API versions
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:

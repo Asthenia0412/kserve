@@ -156,8 +156,8 @@ def _make_client(
         extra_dirs=extra_dirs,
         compress=compress,
     )
-    client.get_blob.side_effect = lambda target, digest, stream=True: (
-        _FakeBlobResponse(layer_bytes)
+    client.get_blob.side_effect = lambda target, digest, stream=True: _FakeBlobResponse(
+        layer_bytes
     )
     return client
 
@@ -549,8 +549,8 @@ def test_oci_multi_arch_index_resolves_to_platform(tmp_path):
     # the per-platform manifest whose layers are actually streamed.
     client.get_manifest.side_effect = [_INDEX, per_platform_manifest]
     layer_bytes = _build_layer_tar_bytes()
-    client.get_blob.side_effect = lambda target, digest, stream=True: (
-        _FakeBlobResponse(layer_bytes)
+    client.get_blob.side_effect = lambda target, digest, stream=True: _FakeBlobResponse(
+        layer_bytes
     )
     with (
         mock.patch("oras.client.OrasClient", return_value=client),

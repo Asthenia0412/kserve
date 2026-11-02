@@ -26,7 +26,9 @@ import kfp.dsl as dsl
 import kfp
 from kfp import components
 
-kserve_op = components.load_component_from_url('https://raw.githubusercontent.com/kubeflow/pipelines/master/components/kserve/component.yaml')
+kserve_op = components.load_component_from_url(
+    "https://raw.githubusercontent.com/kubeflow/pipelines/master/components/kserve/component.yaml"
+)
 ```
 
 ### Arguments
@@ -57,17 +59,16 @@ kserve_op = components.load_component_from_url('https://raw.githubusercontent.co
 The following will use the KServe component to deploy a TensorFlow model.
 
 ```python
-@dsl.pipeline(
-  name='KServe Pipeline',
-  description='A pipeline for KServe.'
-)
+@dsl.pipeline(name="KServe Pipeline", description="A pipeline for KServe.")
 def kserve_pipeline():
     kserve_op(
-        action='apply',
-        model_name='tf-sample',
-        model_uri='gs://kfserving-examples/models/tensorflow/flowers',
-        framework='tensorflow',
+        action="apply",
+        model_name="tf-sample",
+        model_uri="gs://kfserving-examples/models/tensorflow/flowers",
+        framework="tensorflow",
     )
+
+
 kfp.Client().create_run_from_pipeline_func(kserve_pipeline, arguments={})
 ```
 
@@ -75,10 +76,10 @@ Sample op for deploying a PyTorch model:
 
 ```python
 kserve_op(
-    action='apply',
-    model_name='pytorch-test',
-    model_uri='gs://kfserving-examples/models/torchserve/image_classifier',
-    framework='pytorch'
+    action="apply",
+    model_name="pytorch-test",
+    model_uri="gs://kfserving-examples/models/torchserve/image_classifier",
+    framework="pytorch",
 )
 ```
 
@@ -88,10 +89,10 @@ Ensure you have an initial model deployed with 100 percent traffic with somethin
 
 ```python
 kserve_op(
-    action = 'apply',
-    model_name='tf-sample',
-    model_uri='gs://kfserving-examples/models/tensorflow/flowers',
-    framework='tensorflow',
+    action="apply",
+    model_name="tf-sample",
+    model_uri="gs://kfserving-examples/models/tensorflow/flowers",
+    framework="tensorflow",
 )
 ```
 
@@ -99,11 +100,11 @@ Deploy the candidate model which will only get a portion of traffic:
 
 ```python
 kserve_op(
-    action='apply',
-    model_name='tf-sample',
-    model_uri='gs://kfserving-examples/models/tensorflow/flowers-2',
-    framework='tensorflow',
-    canary_traffic_percent='10'
+    action="apply",
+    model_name="tf-sample",
+    model_uri="gs://kfserving-examples/models/tensorflow/flowers-2",
+    framework="tensorflow",
+    canary_traffic_percent="10",
 )
 ```
 
@@ -111,10 +112,10 @@ To promote the candidate model, you can either set `canary_traffic_percent` to `
 
 ```python
 kserve_op(
-    action='apply',
-    model_name='tf-sample',
-    model_uri='gs://kfserving-examples/models/tensorflow/flowers-2',
-    framework='tensorflow'
+    action="apply",
+    model_name="tf-sample",
+    model_uri="gs://kfserving-examples/models/tensorflow/flowers-2",
+    framework="tensorflow",
 )
 ```
 
@@ -122,11 +123,11 @@ If you instead want to rollback the candidate model, then set `canary_traffic_pe
 
 ```python
 kserve_op(
-    action='apply',
-    model_name='tf-sample',
-    model_uri='gs://kfserving-examples/models/tensorflow/flowers-2',
-    framework='tensorflow',
-    canary_traffic_percent='0'
+    action="apply",
+    model_name="tf-sample",
+    model_uri="gs://kfserving-examples/models/tensorflow/flowers-2",
+    framework="tensorflow",
+    canary_traffic_percent="0",
 )
 ```
 
@@ -135,10 +136,7 @@ kserve_op(
 To delete a model, simply set the `action` to `'delete'` and pass in the InferenceService name:
 
 ```python
-kserve_op(
-    action='delete',
-    model_name='tf-sample'
-)
+kserve_op(action="delete", model_name="tf-sample")
 ```
 
 ### Custom Runtime
@@ -159,12 +157,10 @@ the expected format for `custom_model_spec` coincides with:
 Sample deployment:
 
 ```python
-container_spec = '{ "image": "codait/max-object-detector", "port":5000, "name": "custom-container"}'
-kserve_op(
-    action='apply',
-    model_name='custom-simple',
-    custom_model_spec=container_spec
+container_spec = (
+    '{ "image": "codait/max-object-detector", "port":5000, "name": "custom-container"}'
 )
+kserve_op(action="apply", model_name="custom-simple", custom_model_spec=container_spec)
 ```
 
 ### Deploy using InferenceService YAML
@@ -172,7 +168,7 @@ kserve_op(
 If you need more fine-grained configuration, there is the option to deploy using an InferenceService YAML file:
 
 ```python
-isvc_yaml = '''
+isvc_yaml = """
 apiVersion: "serving.kserve.io/v1beta1"
 kind: "InferenceService"
 metadata:
@@ -182,9 +178,6 @@ spec:
   predictor:
     sklearn:
       storageUri: "gs://kfserving-examples/models/sklearn/iris"
-'''
-kserve_op(
-    action='apply',
-    inferenceservice_yaml=isvc_yaml
-)
+"""
+kserve_op(action="apply", inferenceservice_yaml=isvc_yaml)
 ```

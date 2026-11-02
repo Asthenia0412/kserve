@@ -13,11 +13,12 @@ For sharding the Huggingface models you can use the following script, and then [
 
 ```python
 from transformers import AutoModelForCausalLM, AutoTokenizer
-model_name="bigscience/bloomz-7b1"
+
+model_name = "bigscience/bloomz-7b1"
 model = AutoModelForCausalLM.from_pretrained(model_name)
 tokenizer = AutoTokenizer.from_pretrained(model_name)
-model.save_pretrained("model/"+model_name, max_shard_size="5GB")
-tokenizer.save_pretrained("model/"+model_name)
+model.save_pretrained("model/" + model_name, max_shard_size="5GB")
+tokenizer.save_pretrained("model/" + model_name)
 ```
 
 ## Create NVMe Persistent Volume

@@ -105,6 +105,8 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/kserve/kserve/pkg/apis/serving/v1alpha2.LLMInferenceServiceConfigList":    schema_pkg_apis_serving_v1alpha2_LLMInferenceServiceConfigList(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1alpha2.LLMInferenceServiceList":          schema_pkg_apis_serving_v1alpha2_LLMInferenceServiceList(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ARTExplainerSpec":                  schema_pkg_apis_serving_v1beta1_ARTExplainerSpec(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ActuatorSpec":                      schema_pkg_apis_serving_v1beta1_ActuatorSpec(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.AppliedConfigRef":                  schema_pkg_apis_serving_v1beta1_AppliedConfigRef(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.AuthenticationRef":                 schema_pkg_apis_serving_v1beta1_AuthenticationRef(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.AutoScalingSpec":                   schema_pkg_apis_serving_v1beta1_AutoScalingSpec(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.AutoscalerConfig":                  schema_pkg_apis_serving_v1beta1_AutoscalerConfig(ref),
@@ -119,6 +121,8 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.CustomTransformer":                 schema_pkg_apis_serving_v1beta1_CustomTransformer(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.DeployConfig":                      schema_pkg_apis_serving_v1beta1_DeployConfig(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.DeploymentRolloutStrategy":         schema_pkg_apis_serving_v1beta1_DeploymentRolloutStrategy(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.DirectKEDAScalingSpec":             schema_pkg_apis_serving_v1beta1_DirectKEDAScalingSpec(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.EmptyDirTierSpec":                  schema_pkg_apis_serving_v1beta1_EmptyDirTierSpec(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ExplainerConfig":                   schema_pkg_apis_serving_v1beta1_ExplainerConfig(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ExplainerExtensionSpec":            schema_pkg_apis_serving_v1beta1_ExplainerExtensionSpec(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ExplainerSpec":                     schema_pkg_apis_serving_v1beta1_ExplainerSpec(ref),
@@ -127,7 +131,16 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ExternalMetricSource":              schema_pkg_apis_serving_v1beta1_ExternalMetricSource(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ExternalMetrics":                   schema_pkg_apis_serving_v1beta1_ExternalMetrics(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.FailureInfo":                       schema_pkg_apis_serving_v1beta1_FailureInfo(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.FileSystemTierSpec":                schema_pkg_apis_serving_v1beta1_FileSystemTierSpec(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.GatewayObjectReference":            schema_pkg_apis_serving_v1beta1_GatewayObjectReference(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.GatewayRoutesSpec":                 schema_pkg_apis_serving_v1beta1_GatewayRoutesSpec(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.GatewaySpec":                       schema_pkg_apis_serving_v1beta1_GatewaySpec(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.GroupMemberStatus":                 schema_pkg_apis_serving_v1beta1_GroupMemberStatus(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.GroupStatus":                       schema_pkg_apis_serving_v1beta1_GroupStatus(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.HPAScalingSpec":                    schema_pkg_apis_serving_v1beta1_HPAScalingSpec(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.HTTPRouteSpec":                     schema_pkg_apis_serving_v1beta1_HTTPRouteSpec(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.HuggingFaceRuntimeSpec":            schema_pkg_apis_serving_v1beta1_HuggingFaceRuntimeSpec(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.InferencePoolSpec":                 schema_pkg_apis_serving_v1beta1_InferencePoolSpec(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.InferenceService":                  schema_pkg_apis_serving_v1beta1_InferenceService(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.InferenceServiceDefaulter":         schema_pkg_apis_serving_v1beta1_InferenceServiceDefaulter(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.InferenceServiceList":              schema_pkg_apis_serving_v1beta1_InferenceServiceList(ref),
@@ -136,6 +149,9 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.InferenceServiceValidator":         schema_pkg_apis_serving_v1beta1_InferenceServiceValidator(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.InferenceServicesConfig":           schema_pkg_apis_serving_v1beta1_InferenceServicesConfig(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.IngressConfig":                     schema_pkg_apis_serving_v1beta1_IngressConfig(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.IngressSpec":                       schema_pkg_apis_serving_v1beta1_IngressSpec(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.KEDAScalingSpec":                   schema_pkg_apis_serving_v1beta1_KEDAScalingSpec(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.KVCacheOffloadingSpec":             schema_pkg_apis_serving_v1beta1_KVCacheOffloadingSpec(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.KernelCacheArtifactCertConfig":     schema_pkg_apis_serving_v1beta1_KernelCacheArtifactCertConfig(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.KernelCacheArtifactSecurityConfig": schema_pkg_apis_serving_v1beta1_KernelCacheArtifactSecurityConfig(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.KernelCacheConfig":                 schema_pkg_apis_serving_v1beta1_KernelCacheConfig(ref),
@@ -143,7 +159,17 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.KernelCacheRegistryAuth":           schema_pkg_apis_serving_v1beta1_KernelCacheRegistryAuth(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.KernelCacheRegistryConfig":         schema_pkg_apis_serving_v1beta1_KernelCacheRegistryConfig(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.KernelCacheRegistryRoleRef":        schema_pkg_apis_serving_v1beta1_KernelCacheRegistryRoleRef(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.LLMInferenceService":               schema_pkg_apis_serving_v1beta1_LLMInferenceService(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.LLMInferenceServiceConfig":         schema_pkg_apis_serving_v1beta1_LLMInferenceServiceConfig(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.LLMInferenceServiceConfigList":     schema_pkg_apis_serving_v1beta1_LLMInferenceServiceConfigList(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.LLMInferenceServiceConfigStatus":   schema_pkg_apis_serving_v1beta1_LLMInferenceServiceConfigStatus(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.LLMInferenceServiceList":           schema_pkg_apis_serving_v1beta1_LLMInferenceServiceList(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.LLMInferenceServiceSpec":           schema_pkg_apis_serving_v1beta1_LLMInferenceServiceSpec(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.LLMInferenceServiceStatus":         schema_pkg_apis_serving_v1beta1_LLMInferenceServiceStatus(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.LLMInferenceServiceValidator":      schema_pkg_apis_serving_v1beta1_LLMInferenceServiceValidator(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.LLMModelSpec":                      schema_pkg_apis_serving_v1beta1_LLMModelSpec(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.LightGBMSpec":                      schema_pkg_apis_serving_v1beta1_LightGBMSpec(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.LoRASpec":                          schema_pkg_apis_serving_v1beta1_LoRASpec(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.LocalModelConfig":                  schema_pkg_apis_serving_v1beta1_LocalModelConfig(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.LoggerSpec":                        schema_pkg_apis_serving_v1beta1_LoggerSpec(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.LoggerStorageSpec":                 schema_pkg_apis_serving_v1beta1_LoggerStorageSpec(ref),
@@ -152,14 +178,21 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ModelCopies":                       schema_pkg_apis_serving_v1beta1_ModelCopies(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ModelFormat":                       schema_pkg_apis_serving_v1beta1_ModelFormat(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ModelRevisionStates":               schema_pkg_apis_serving_v1beta1_ModelRevisionStates(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ModelSourcedAddressStatus":         schema_pkg_apis_serving_v1beta1_ModelSourcedAddressStatus(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ModelSpec":                         schema_pkg_apis_serving_v1beta1_ModelSpec(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ModelStatus":                       schema_pkg_apis_serving_v1beta1_ModelStatus(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ModelStorageSpec":                  schema_pkg_apis_serving_v1beta1_ModelStorageSpec(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.MultiNodeConfig":                   schema_pkg_apis_serving_v1beta1_MultiNodeConfig(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ONNXRuntimeSpec":                   schema_pkg_apis_serving_v1beta1_ONNXRuntimeSpec(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ObservedGateway":                   schema_pkg_apis_serving_v1beta1_ObservedGateway(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ObservedSchedulerStatus":           schema_pkg_apis_serving_v1beta1_ObservedSchedulerStatus(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ObservedWorkloadStatus":            schema_pkg_apis_serving_v1beta1_ObservedWorkloadStatus(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.OtelCollectorConfig":               schema_pkg_apis_serving_v1beta1_OtelCollectorConfig(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.PMMLSpec":                          schema_pkg_apis_serving_v1beta1_PMMLSpec(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.PVCRefTierSpec":                    schema_pkg_apis_serving_v1beta1_PVCRefTierSpec(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.PVCTierSpec":                       schema_pkg_apis_serving_v1beta1_PVCTierSpec(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.PaddleServerSpec":                  schema_pkg_apis_serving_v1beta1_PaddleServerSpec(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ParallelismSpec":                   schema_pkg_apis_serving_v1beta1_ParallelismSpec(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.PodMetricSource":                   schema_pkg_apis_serving_v1beta1_PodMetricSource(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.PodMetrics":                        schema_pkg_apis_serving_v1beta1_PodMetrics(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.PodSpec":                           schema_pkg_apis_serving_v1beta1_PodSpec(ref),
@@ -168,17 +201,31 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ResourceConfig":                    schema_pkg_apis_serving_v1beta1_ResourceConfig(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ResourceMetricSource":              schema_pkg_apis_serving_v1beta1_ResourceMetricSource(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.RolloutSpec":                       schema_pkg_apis_serving_v1beta1_RolloutSpec(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.RolloutStrategy":                   schema_pkg_apis_serving_v1beta1_RolloutStrategy(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.RouterSpec":                        schema_pkg_apis_serving_v1beta1_RouterSpec(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.RouterStatus":                      schema_pkg_apis_serving_v1beta1_RouterStatus(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.SKLearnSpec":                       schema_pkg_apis_serving_v1beta1_SKLearnSpec(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ScalingSpec":                       schema_pkg_apis_serving_v1beta1_ScalingSpec(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.SchedulerConfigSpec":               schema_pkg_apis_serving_v1beta1_SchedulerConfigSpec(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.SchedulerSpec":                     schema_pkg_apis_serving_v1beta1_SchedulerSpec(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.SecondaryTierSpec":                 schema_pkg_apis_serving_v1beta1_SecondaryTierSpec(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.SecurityConfig":                    schema_pkg_apis_serving_v1beta1_SecurityConfig(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ServiceConfig":                     schema_pkg_apis_serving_v1beta1_ServiceConfig(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.SourcedAddress":                    schema_pkg_apis_serving_v1beta1_SourcedAddress(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.StorageInitializerSpec":            schema_pkg_apis_serving_v1beta1_StorageInitializerSpec(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.StorageSpec":                       schema_pkg_apis_serving_v1beta1_StorageSpec(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.StorageUri":                        schema_pkg_apis_serving_v1beta1_StorageUri(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.TFServingSpec":                     schema_pkg_apis_serving_v1beta1_TFServingSpec(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.TokenizerSpec":                     schema_pkg_apis_serving_v1beta1_TokenizerSpec(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.TorchServeSpec":                    schema_pkg_apis_serving_v1beta1_TorchServeSpec(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.TracingSpec":                       schema_pkg_apis_serving_v1beta1_TracingSpec(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.TransformerSpec":                   schema_pkg_apis_serving_v1beta1_TransformerSpec(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.TritonSpec":                        schema_pkg_apis_serving_v1beta1_TritonSpec(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.UntypedObjectReference":            schema_pkg_apis_serving_v1beta1_UntypedObjectReference(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.WVASpec":                           schema_pkg_apis_serving_v1beta1_WVASpec(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.WorkerSpec":                        schema_pkg_apis_serving_v1beta1_WorkerSpec(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.WorkloadSpec":                      schema_pkg_apis_serving_v1beta1_WorkloadSpec(ref),
+		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.WorkloadStatus":                    schema_pkg_apis_serving_v1beta1_WorkloadStatus(ref),
 		"github.com/kserve/kserve/pkg/apis/serving/v1beta1.XGBoostSpec":                       schema_pkg_apis_serving_v1beta1_XGBoostSpec(ref),
 	}
 }
@@ -4447,6 +4494,68 @@ func schema_pkg_apis_serving_v1beta1_ARTExplainerSpec(ref common.ReferenceCallba
 	}
 }
 
+func schema_pkg_apis_serving_v1beta1_ActuatorSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ActuatorSpec defines the autoscaling actuator backend for WVA. Exactly one of HPA or KEDA must be specified.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"hpa": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.HPAScalingSpec"),
+						},
+					},
+					"keda": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.KEDAScalingSpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.HPAScalingSpec", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.KEDAScalingSpec"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_AppliedConfigRef(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "AppliedConfigRef identifies a resource that contributed to the final merged configuration during reconciliation.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name of the LLMInferenceServiceConfig, ServingRuntime, or ClusterServingRuntime resource that was applied.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"namespace": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Namespace where the LLMInferenceServiceConfig or ServingRuntime was resolved from. Omitted for cluster-scoped resources such as ClusterServingRuntime.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"source": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Source indicates where this config came from: one KServe ships and selected itself, one the service referenced, or a container spec contributed by a ServingRuntime. A config resolved outside the KServe namespace reports UserRef even when it answers to a well-known preset name.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"name", "source"},
+			},
+		},
+	}
+}
+
 func schema_pkg_apis_serving_v1beta1_AuthenticationRef(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -6459,6 +6568,102 @@ func schema_pkg_apis_serving_v1beta1_DeploymentRolloutStrategy(ref common.Refere
 	}
 }
 
+func schema_pkg_apis_serving_v1beta1_DirectKEDAScalingSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "DirectKEDAScalingSpec configures direct KEDA scaling. It embeds KEDAScalingSpec for shared ScaledObject settings and adds user-defined triggers.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"pollingInterval": {
+						SchemaProps: spec.SchemaProps{
+							Description: "PollingInterval is the interval in seconds to check each trigger on. Must be at least 1 second.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"cooldownPeriod": {
+						SchemaProps: spec.SchemaProps{
+							Description: "CooldownPeriod is the period in seconds to wait after the last trigger reported active before scaling the resource back to its minimum replica count. A value of 0 means scale down immediately with no cooldown.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"initialCooldownPeriod": {
+						SchemaProps: spec.SchemaProps{
+							Description: "InitialCooldownPeriod is the period in seconds to wait after the ScaledObject is created before KEDA starts evaluating triggers. Useful for LLM deployments where the model takes time to load before it can serve traffic, preventing premature scale-up decisions.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"idleReplicaCount": {
+						SchemaProps: spec.SchemaProps{
+							Description: "IdleReplicaCount is the number of replicas KEDA will scale the resource down to when there are no triggers active. This must be less than minReplicas. Set to 0 for true scale-to-zero: KEDA scales the resource to zero replicas when idle and immediately back to minReplicas once a trigger becomes active. If not set, KEDA will not scale below minReplicas.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"fallback": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Fallback defines the replica count to maintain when the scaler is in a fallback state (e.g., when metrics are unavailable). This allows the deployment to hold a safe replica count during metric outages rather than scaling to zero.",
+							Ref:         ref("github.com/kedacore/keda/v2/apis/keda/v1alpha1.Fallback"),
+						},
+					},
+					"advanced": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Advanced specifies the advanced KEDA configuration options. This includes HPA behavior configuration and restore-to-original replica count settings.",
+							Ref:         ref("github.com/kedacore/keda/v2/apis/keda/v1alpha1.AdvancedConfig"),
+						},
+					},
+					"triggers": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-type": "atomic",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "Triggers defines the KEDA scaling triggers. At least one trigger is required.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/kedacore/keda/v2/apis/keda/v1alpha1.ScaleTriggers"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"triggers"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kedacore/keda/v2/apis/keda/v1alpha1.AdvancedConfig", "github.com/kedacore/keda/v2/apis/keda/v1alpha1.Fallback", "github.com/kedacore/keda/v2/apis/keda/v1alpha1.ScaleTriggers"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_EmptyDirTierSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "EmptyDirTierSpec configures a node-local ephemeral emptyDir volume as a KV cache tier.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"size": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Size is the maximum storage capacity for this tier (maps to emptyDir.sizeLimit). The controller also requests this amount as ephemeral-storage on the main container.",
+							Ref:         ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
+						},
+					},
+				},
+				Required: []string{"size"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/api/resource.Quantity"},
+	}
+}
+
 func schema_pkg_apis_serving_v1beta1_ExplainerConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -7625,6 +7830,274 @@ func schema_pkg_apis_serving_v1beta1_FailureInfo(ref common.ReferenceCallback) c
 	}
 }
 
+func schema_pkg_apis_serving_v1beta1_FileSystemTierSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "FileSystemTierSpec configures a POSIX disk secondary tier. Exactly one of EmptyDir or PVC must be set.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"emptyDir": {
+						SchemaProps: spec.SchemaProps{
+							Description: "EmptyDir uses a node-local ephemeral emptyDir volume. No StorageClass required. Each pod gets its own independent, node-local disk cache. The controller also adds an ephemeral-storage resource request to the main container equal to the size so the scheduler accounts for the disk space when placing the pod.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.EmptyDirTierSpec"),
+						},
+					},
+					"pvc": {
+						SchemaProps: spec.SchemaProps{
+							Description: "PVC configures a PVC-backed disk cache tier. Either Spec (for a controller-managed ephemeral PVC per pod) or Ref (for a pre-existing user-managed PVC) must be set, but not both.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.PVCTierSpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.EmptyDirTierSpec", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.PVCTierSpec"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_GatewayObjectReference(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "GatewayObjectReference is a reference to a Gateway resource. It extends UntypedObjectReference with Gateway-specific fields.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name of the referenced object.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"namespace": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Namespace of the referenced object.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"sectionName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "SectionName is the name of a section within the target resource. When set on a Gateway reference, it targets a specific listener by name. When unset, the route is attached to all listeners on the referenced Gateway that support the route type.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_GatewayRoutesSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "GatewayRoutesSpec defines the configuration for a Gateway API route.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"http": {
+						SchemaProps: spec.SchemaProps{
+							Description: "HTTP route configuration.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.HTTPRouteSpec"),
+						},
+					},
+					"group": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Group identifies the routing group this LLMISVC belongs to. All members with the same group share weighted traffic distribution. Must be explicit - not inferred from spec.model.name.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"weight": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Weight is the proportional traffic share for this member. Follows Gateway API backendRef weight semantics (proportional, not percentage).",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.HTTPRouteSpec"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_GatewaySpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "GatewaySpec defines the configuration for a Gateway API Gateway.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"refs": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Refs provides references to existing, user-managed Gateway objects (\"Bring Your Own\" gateway). The controller will use the specified Gateway instead of creating one.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.GatewayObjectReference"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.GatewayObjectReference"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_GroupMemberStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "GroupMemberStatus reports the observed state of a single group member.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name of the group member (LLMInferenceService name).",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"weight": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Weight is the effective traffic weight for this member.",
+							Default:     0,
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"stopped": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Stopped is true when the member has the force-stop annotation set. A stopped member remains in the group but receives no traffic (weight is overridden to 0 regardless of the spec value).",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"backendRef": {
+						SchemaProps: spec.SchemaProps{
+							Description: "BackendRef is the resolved backend for this member (InferencePool or Service).",
+							Ref:         ref("sigs.k8s.io/gateway-api/apis/v1.BackendObjectReference"),
+						},
+					},
+				},
+				Required: []string{"name", "weight"},
+			},
+		},
+		Dependencies: []string{
+			"sigs.k8s.io/gateway-api/apis/v1.BackendObjectReference"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_GroupStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "GroupStatus reports the observed state of the routing group this LLMISVC belongs to.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name of the routing group.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"members": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-map-keys": []interface{}{
+									"name",
+								},
+								"x-kubernetes-list-type": "map",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "Members lists all observed members of the group with their weights and resolved backend references.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.GroupMemberStatus"),
+									},
+								},
+							},
+						},
+					},
+				},
+				
+			},
+		},
+		Dependencies: []string{
+			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.GroupMemberStatus"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_HPAScalingSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "HPAScalingSpec configures the HorizontalPodAutoscaler behavior.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"behavior": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("k8s.io/api/autoscaling/v2.HorizontalPodAutoscalerBehavior"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/autoscaling/v2.HorizontalPodAutoscalerBehavior"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_HTTPRouteSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "HTTPRouteSpec defines configurations for a Gateway API HTTPRoute. 'Spec' and 'Refs' are mutually exclusive and determine whether the route is managed by the controller or user-managed.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"refs": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Refs provides references to existing, user-managed HTTPRoute objects (\"Bring Your Own\" route). The controller will validate the existence of these routes but will not modify them.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
+									},
+								},
+							},
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Spec allows for providing a custom specification for an HTTPRoute. If provided, the controller will create and manage an HTTPRoute with this specification.",
+							Ref:         ref("sigs.k8s.io/gateway-api/apis/v1.HTTPRouteSpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.LocalObjectReference", "sigs.k8s.io/gateway-api/apis/v1.HTTPRouteSpec"},
+	}
+}
+
 func schema_pkg_apis_serving_v1beta1_HuggingFaceRuntimeSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -7964,6 +8437,33 @@ func schema_pkg_apis_serving_v1beta1_HuggingFaceRuntimeSpec(ref common.Reference
 		},
 		Dependencies: []string{
 			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ConfidentialSpec", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.ModelStorageSpec", "k8s.io/api/core/v1.ContainerPort", "k8s.io/api/core/v1.ContainerResizePolicy", "k8s.io/api/core/v1.ContainerRestartRule", "k8s.io/api/core/v1.EnvFromSource", "k8s.io/api/core/v1.EnvVar", "k8s.io/api/core/v1.Lifecycle", "k8s.io/api/core/v1.Probe", "k8s.io/api/core/v1.ResourceRequirements", "k8s.io/api/core/v1.SecurityContext", "k8s.io/api/core/v1.VolumeDevice", "k8s.io/api/core/v1.VolumeMount"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_InferencePoolSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "InferencePoolSpec defines the configuration for an InferencePool. 'Spec' and 'Ref' are mutually exclusive.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Spec defines an inline InferencePool specification.",
+							Ref:         ref("sigs.k8s.io/gateway-api-inference-extension/api/v1.InferencePoolSpec"),
+						},
+					},
+					"ref": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Ref is a reference to an existing InferencePool.",
+							Ref:         ref("k8s.io/api/core/v1.LocalObjectReference"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.LocalObjectReference", "sigs.k8s.io/gateway-api-inference-extension/api/v1.InferencePoolSpec"},
 	}
 }
 
@@ -8467,6 +8967,131 @@ func schema_pkg_apis_serving_v1beta1_IngressConfig(ref common.ReferenceCallback)
 	}
 }
 
+func schema_pkg_apis_serving_v1beta1_IngressSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "IngressSpec defines the configuration for a Kubernetes Ingress.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"refs": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Refs provides a reference to an existing, user-managed Ingress object (\"Bring Your Own\" ingress). The controller will not create an Ingress but will use the referenced one to populate status URLs.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.UntypedObjectReference"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.UntypedObjectReference"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_KEDAScalingSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "KEDAScalingSpec configures the KEDA ScaledObject for autoscaling. The fields are directly from the upstream KEDA ScaledObject API.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"pollingInterval": {
+						SchemaProps: spec.SchemaProps{
+							Description: "PollingInterval is the interval in seconds to check each trigger on. Must be at least 1 second.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"cooldownPeriod": {
+						SchemaProps: spec.SchemaProps{
+							Description: "CooldownPeriod is the period in seconds to wait after the last trigger reported active before scaling the resource back to its minimum replica count. A value of 0 means scale down immediately with no cooldown.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"initialCooldownPeriod": {
+						SchemaProps: spec.SchemaProps{
+							Description: "InitialCooldownPeriod is the period in seconds to wait after the ScaledObject is created before KEDA starts evaluating triggers. Useful for LLM deployments where the model takes time to load before it can serve traffic, preventing premature scale-up decisions.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"idleReplicaCount": {
+						SchemaProps: spec.SchemaProps{
+							Description: "IdleReplicaCount is the number of replicas KEDA will scale the resource down to when there are no triggers active. This must be less than minReplicas. Set to 0 for true scale-to-zero: KEDA scales the resource to zero replicas when idle and immediately back to minReplicas once a trigger becomes active. If not set, KEDA will not scale below minReplicas.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"fallback": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Fallback defines the replica count to maintain when the scaler is in a fallback state (e.g., when metrics are unavailable). This allows the deployment to hold a safe replica count during metric outages rather than scaling to zero.",
+							Ref:         ref("github.com/kedacore/keda/v2/apis/keda/v1alpha1.Fallback"),
+						},
+					},
+					"advanced": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Advanced specifies the advanced KEDA configuration options. This includes HPA behavior configuration and restore-to-original replica count settings.",
+							Ref:         ref("github.com/kedacore/keda/v2/apis/keda/v1alpha1.AdvancedConfig"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kedacore/keda/v2/apis/keda/v1alpha1.AdvancedConfig", "github.com/kedacore/keda/v2/apis/keda/v1alpha1.Fallback"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_KVCacheOffloadingSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "KVCacheOffloadingSpec configures KV cache offloading via vLLM's OffloadingConnector.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"cpu": {
+						SchemaProps: spec.SchemaProps{
+							Description: "CPU is the amount of CPU RAM to allocate as the primary KV cache tier (maps to vLLM kv_connector_extra_config.cpu_bytes_to_use). Accepts standard Kubernetes quantity notation, e.g. \"10Gi\".\n\nThis sizes one engine's tier. Tensor parallelism divides it across the engine's ranks, but a pod running parallelism.dataLocal local engines holds one copy each, so both the shared-memory volume and the container's memory limit have to cover the product rather than this value alone.",
+							Ref:         ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
+						},
+					},
+					"evictionPolicy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "EvictionPolicy for the primary CPU KV cache tier. Defaults to \"lru\".",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"secondary": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Secondary is an ordered list of secondary KV cache tiers. vLLM cascades through tiers in the order listed. Currently only fileSystem tiers are supported; the array shape is designed to accommodate object store tiers in a future follow-up without an API break.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.SecondaryTierSpec"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"cpu"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.SecondaryTierSpec", "k8s.io/apimachinery/pkg/api/resource.Quantity"},
+	}
+}
+
 func schema_pkg_apis_serving_v1beta1_KernelCacheArtifactCertConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -8776,6 +9401,577 @@ func schema_pkg_apis_serving_v1beta1_KernelCacheRegistryRoleRef(ref common.Refer
 				Required: []string{"kind", "name"},
 			},
 		},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_LLMInferenceService(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "LLMInferenceService is the Schema for the llminferenceservices API, representing a single LLM deployment. It orchestrates the creation of underlying Kubernetes resources like Deployments and Services, and configures networking for exposing the model.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.LLMInferenceServiceSpec"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.LLMInferenceServiceStatus"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.LLMInferenceServiceSpec", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.LLMInferenceServiceStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_LLMInferenceServiceConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "LLMInferenceServiceConfig is the Schema for the llminferenceserviceconfigs API. It acts as a template to provide base configurations that can be inherited by multiple LLMInferenceService instances.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.LLMInferenceServiceSpec"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.LLMInferenceServiceConfigStatus"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.LLMInferenceServiceConfigStatus", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.LLMInferenceServiceSpec", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_LLMInferenceServiceConfigList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "LLMInferenceServiceConfigList is the list type for LLMInferenceServiceConfig.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.LLMInferenceServiceConfig"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.LLMInferenceServiceConfig", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_LLMInferenceServiceConfigStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "LLMInferenceServiceConfigStatus defines the observed state of LLMInferenceServiceConfig.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"observedGeneration": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ObservedGeneration is the 'Generation' of the Service that was last processed by the controller.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"conditions": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-patch-merge-key": "type",
+								"x-kubernetes-patch-strategy":  "merge",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions the latest available observations of a resource's current state.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("knative.dev/pkg/apis.Condition"),
+									},
+								},
+							},
+						},
+					},
+					"annotations": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Annotations is additional Status fields for the Resource to save some additional State as well as convey more information to the user. This is roughly akin to Annotations on any k8s resource, just the reconciler conveying richer information outwards.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type:   []string{"string"},
+										Format: "",
+									},
+								},
+							},
+						},
+					},
+					"referencedBy": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-type": "atomic",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "ReferencedBy lists the LLMInferenceService instances that reference this config via spec.baseRefs, status.annotations, or implicitly as a well-known default.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.UntypedObjectReference"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.UntypedObjectReference", "knative.dev/pkg/apis.Condition"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_LLMInferenceServiceList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "LLMInferenceServiceList is the list type for LLMInferenceService.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.LLMInferenceService"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.LLMInferenceService", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_LLMInferenceServiceSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "LLMInferenceServiceSpec defines the desired state of LLMInferenceService.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"model": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Model specification, including its URI, potential LoRA adapters, and storage details. It's optional for `LLMInferenceServiceConfig` kind.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.LLMModelSpec"),
+						},
+					},
+					"runtime": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Runtime is the name of a ServingRuntime (namespaced) or ClusterServingRuntime that supplies the base container spec — primarily the container image — for the inference workload. The controller resolves this name against ServingRuntime in the LLMInferenceService's namespace first, then falls back to ClusterServingRuntime. The resolved container spec is prepended as the lowest-priority layer in the merge chain, so LLMInferenceServiceConfig baseRefs and spec.template still override it.\n\nWhen omitted, the controller uses the default vLLM template (kserve-config-llm-template) which ships its own image.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"storageInitializer": {
+						SchemaProps: spec.SchemaProps{
+							Description: "StorageInitializer configuration for model artifact fetching.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.StorageInitializerSpec"),
+						},
+					},
+					"replicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Number of replicas for the deployment.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"scaling": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Scaling configuration for autoscaling this workload. When specified, the controller creates and manages autoscaling resources (ServiceMonitor and the selected actuator — HPA or KEDA ScaledObject) targeting this workload. Mutually exclusive with the static 'replicas' field. In a disaggregated setup, each workload (decode and prefill) can have its own independent scaling configuration, resulting in separate autoscaling resources per workload.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.ScalingSpec"),
+						},
+					},
+					"parallelism": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Parallelism configurations for the runtime, such as tensor and pipeline parallelism. These values are used to configure the underlying inference runtime (e.g., vLLM).",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.ParallelismSpec"),
+						},
+					},
+					"labels": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Labels that will be added to the component pod. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type:   []string{"string"},
+										Format: "",
+									},
+								},
+							},
+						},
+					},
+					"annotations": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Annotations that will be added to the component pod. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type:   []string{"string"},
+										Format: "",
+									},
+								},
+							},
+						},
+					},
+					"template": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Template for the main pod spec. In a multi-node deployment, this configures the \"head\" or \"master\" pod. In a disaggregated deployment, this configures the \"decode\" pod if it's the top-level template, or the \"prefill\" pod if it's within the Prefill block.\n\nFor the storage-initializer init container (named \"storage-initializer\"), users may customize fields such as env, resources, volumeMounts, and image. The container's name, args, and command are controller-managed and any user-provided values for these fields will be overridden. To disable the storage-initializer entirely, use spec.storageInitializer.enabled=false.",
+							Ref:         ref("k8s.io/api/core/v1.PodSpec"),
+						},
+					},
+					"worker": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Worker configuration for multi-node deployments. The presence of this field triggers the creation of a multi-node (distributed) setup. This spec defines the configuration for the worker pods, while the main 'Template' field defines the head pod. The controller is responsible for enabling discovery between head and worker pods.",
+							Ref:         ref("k8s.io/api/core/v1.PodSpec"),
+						},
+					},
+					"kvCacheOffloading": {
+						SchemaProps: spec.SchemaProps{
+							Description: "KVCacheOffloading configures multi-tier KV cache CPU offloading for this workload. The controller translates this into --kv-transfer-config for the vLLM serve command.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.KVCacheOffloadingSpec"),
+						},
+					},
+					"rolloutStrategy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "RolloutStrategy configures how rolling updates are performed for this workload. When omitted, Kubernetes/LWS defaults apply (maxUnavailable: 25%, maxSurge: 25% for Deployments; maxUnavailable: 1, maxSurge: 0 for LeaderWorkerSets).",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.RolloutStrategy"),
+						},
+					},
+					"router": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Router configuration for how the service is exposed. This section dictates the creation and management of networking resources like Ingress or Gateway API objects (HTTPRoute, Gateway).",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.RouterSpec"),
+						},
+					},
+					"prefill": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Prefill configuration for disaggregated serving. When this section is included, the controller creates a separate deployment for prompt processing (prefill) in addition to the main 'decode' deployment, inspired by the llm-d architecture. This allows for independent scaling and hardware allocation for prefill and decode steps.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.WorkloadSpec"),
+						},
+					},
+					"tracing": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Tracing configuration for distributed tracing across all managed components. When present (even as `{}`), distributed tracing is enabled with defaults. When omitted, no tracing instrumentation is injected. The controller propagates this configuration to every managed component (inference server and scheduler), automatically adjusting the service name per component (e.g. \"-decode\"/\"-prefill\" suffix for inference servers, \"inference-scheduler\" for the scheduler).",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.TracingSpec"),
+						},
+					},
+					"baseRefs": {
+						SchemaProps: spec.SchemaProps{
+							Description: "BaseRefs allows inheriting and overriding configurations from one or more LLMInferenceServiceConfig instances. The controller merges these base configurations, with the current LLMInferenceService spec taking the highest precedence. When multiple baseRefs are provided, the last one in the list overrides previous ones.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("k8s.io/api/core/v1.LocalObjectReference"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.KVCacheOffloadingSpec", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.LLMModelSpec", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.ParallelismSpec", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.RolloutStrategy", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.RouterSpec", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.ScalingSpec", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.StorageInitializerSpec", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.TracingSpec", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.WorkloadSpec", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PodSpec"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_LLMInferenceServiceStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "LLMInferenceServiceStatus defines the observed state of LLMInferenceService.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"url": {
+						SchemaProps: spec.SchemaProps{
+							Description: "URL is the primary address for accessing the service. It is set to an external (public) address when available, otherwise it is promoted from the first discovered address (which may be cluster-local or private) for easy discovery.",
+							Ref:         ref("knative.dev/pkg/apis.URL"),
+						},
+					},
+					"observedGeneration": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ObservedGeneration is the 'Generation' of the Service that was last processed by the controller.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"conditions": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-patch-merge-key": "type",
+								"x-kubernetes-patch-strategy":  "merge",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions the latest available observations of a resource's current state.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("knative.dev/pkg/apis.Condition"),
+									},
+								},
+							},
+						},
+					},
+					"annotations": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Annotations is additional Status fields for the Resource to save some additional State as well as convey more information to the user. This is roughly akin to Annotations on any k8s resource, just the reconciler conveying richer information outwards.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type:   []string{"string"},
+										Format: "",
+									},
+								},
+							},
+						},
+					},
+					"address": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Deprecated: Address is retained for CRD schema compatibility. It is never populated; use Addresses instead.",
+							Ref:         ref("knative.dev/pkg/apis/duck/v1.Addressable"),
+						},
+					},
+					"addresses": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-type": "atomic",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "Addresses lists the network endpoints where the service is reachable. Each address may include an origin reference identifying the networking resource that produced it.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.SourcedAddress"),
+									},
+								},
+							},
+						},
+					},
+					"router": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Router records the observed networking topology for this service. Nil when routing is not configured or the service is stopped.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.RouterStatus"),
+						},
+					},
+					"workloads": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Workloads records the observed workload resources for this service.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.WorkloadStatus"),
+						},
+					},
+					"appliedConfigs": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-type": "atomic",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "AppliedConfigRefs records which resources were applied during the last successful reconciliation, in merge precedence order. Well-known configs (determined by the deployment pattern) appear first with lower precedence, followed by explicitly referenced baseRefs with higher precedence. The service's own spec always takes the highest precedence but is not listed here. Atomic because the controller always writes the full list and ordering encodes merge precedence.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.AppliedConfigRef"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.AppliedConfigRef", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.RouterStatus", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.SourcedAddress", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.WorkloadStatus", "knative.dev/pkg/apis.Condition", "knative.dev/pkg/apis.URL", "knative.dev/pkg/apis/duck/v1.Addressable"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_LLMInferenceServiceValidator(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "LLMInferenceServiceValidator is responsible for validating the LLMInferenceService resource when it is created, updated, or deleted.",
+				Type:        []string{"object"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_LLMModelSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ConfidentialSpec enables confidential model serving with encrypted model artifacts. When enabled, the storage initializer will decrypt model files using keys obtained from a Key Broker Service (KBS) via TEE attestation.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"uri": {
+						SchemaProps: spec.SchemaProps{
+							Description: "URI of the model, specifying its location, e.g., hf://meta-llama/Llama-4-Scout-17B-16E-Instruct The storage-initializer init container uses this URI to download the model.",
+							Ref:         ref("knative.dev/pkg/apis.URL"),
+						},
+					},
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name is the name of the model as it will be set in the \"model\" parameter for an incoming request. If omitted, it will default to `metadata.name`. For LoRA adapters, this field is required.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"lora": {
+						SchemaProps: spec.SchemaProps{
+							Description: "LoRA (Low-Rank Adaptation) adapters configurations. Allows for specifying one or more LoRA adapters to be applied to the base model.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.LoRASpec"),
+						},
+					},
+					"confidential": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Confidential enables confidential model serving with encrypted model artifacts. When enabled, the storage initializer decrypts model files using keys obtained from a Key Broker Service (KBS) via TEE attestation.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.ConfidentialSpec"),
+						},
+					},
+				},
+				Required: []string{"uri"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ConfidentialSpec", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.LoRASpec", "knative.dev/pkg/apis.URL"},
 	}
 }
 
@@ -9118,6 +10314,55 @@ func schema_pkg_apis_serving_v1beta1_LightGBMSpec(ref common.ReferenceCallback) 
 		},
 		Dependencies: []string{
 			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ConfidentialSpec", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.ModelStorageSpec", "k8s.io/api/core/v1.ContainerPort", "k8s.io/api/core/v1.ContainerResizePolicy", "k8s.io/api/core/v1.ContainerRestartRule", "k8s.io/api/core/v1.EnvFromSource", "k8s.io/api/core/v1.EnvVar", "k8s.io/api/core/v1.Lifecycle", "k8s.io/api/core/v1.Probe", "k8s.io/api/core/v1.ResourceRequirements", "k8s.io/api/core/v1.SecurityContext", "k8s.io/api/core/v1.VolumeDevice", "k8s.io/api/core/v1.VolumeMount"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_LoRASpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "LoRASpec defines the configuration for LoRA adapters.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"adapters": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Adapters is a list of LoRA (Low-Rank Adaptation) adapters to attach to the base model. Each adapter is specified by name and URI (supports hf://, s3://, and pvc:// schemes). The controller automatically downloads adapters and configures the runtime to use them. This type is recursive https://github.com/kubernetes-sigs/controller-tools/issues/585",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.LLMModelSpec"),
+									},
+								},
+							},
+						},
+					},
+					"maxRank": {
+						SchemaProps: spec.SchemaProps{
+							Description: "MaxRank is the maximum LoRA rank supported by the runtime (maps to vLLM --max-lora-rank). Higher values allow adapters with higher rank but increase memory usage. If not set, vLLM's default applies (16).",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"maxAdapters": {
+						SchemaProps: spec.SchemaProps{
+							Description: "MaxAdapters is the maximum number of LoRA adapters that can be loaded simultaneously (maps to vLLM --max-loras). Defaults to the number of configured adapters.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"maxCpuAdapters": {
+						SchemaProps: spec.SchemaProps{
+							Description: "MaxCpuAdapters is the maximum number of LoRA adapters stored in CPU memory (maps to vLLM --max-cpu-loras). Defaults to the number of configured adapters.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.LLMModelSpec"},
 	}
 }
 
@@ -9478,6 +10723,26 @@ func schema_pkg_apis_serving_v1beta1_ModelRevisionStates(ref common.ReferenceCal
 					},
 				},
 				Required: []string{"activeModelState"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_ModelSourcedAddressStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				
 			},
 		},
 	}
@@ -10295,6 +11560,161 @@ func schema_pkg_apis_serving_v1beta1_ONNXRuntimeSpec(ref common.ReferenceCallbac
 	}
 }
 
+func schema_pkg_apis_serving_v1beta1_ObservedGateway(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ObservedGateway is a Gateway reference with the listeners and HTTPRoutes bound to this service through it. Used in status to record observed routing topology.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"group": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Group is the group of the referent. For example, \"gateway.networking.k8s.io\". When set to the empty string, core API group is inferred.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is kind of the referent. For example \"ConfigMap\" or \"Service\".",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name is the name of the referent.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"namespace": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Namespace is the namespace of the referenced object. When unspecified, the local namespace is inferred.\n\nNote that when a namespace different than the local namespace is specified, a ReferenceGrant object is required in the referent namespace to allow that namespace's owner to accept the reference. See the ReferenceGrant documentation for details.\n\nSupport: Core",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"listeners": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-type": "atomic",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "Listeners lists the SectionNames of the Gateway listeners that accepted routes from this service. Nil means the route targets all listeners (no SectionName was specified on the parentRef).",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type:   []string{"string"},
+										Format: "",
+									},
+								},
+							},
+						},
+					},
+					"httpRoutes": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-type": "atomic",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "HTTPRoutes lists the HTTPRoutes bound to this service through this Gateway.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("sigs.k8s.io/gateway-api/apis/v1.ObjectReference"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"group", "kind", "name"},
+			},
+		},
+		Dependencies: []string{
+			"sigs.k8s.io/gateway-api/apis/v1.ObjectReference"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_ObservedSchedulerStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ObservedSchedulerStatus records the scheduler-related resources observed during the last successful routing reconciliation.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"inferencePool": {
+						SchemaProps: spec.SchemaProps{
+							Description: "InferencePool is the InferencePool observed as active for this service.",
+							Ref:         ref("sigs.k8s.io/gateway-api/apis/v1.ObjectReference"),
+						},
+					},
+					"service": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Service is the EPP Service observed for this service.",
+							Ref:         ref("sigs.k8s.io/gateway-api/apis/v1.ObjectReference"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"sigs.k8s.io/gateway-api/apis/v1.ObjectReference"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_ObservedWorkloadStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ObservedWorkloadStatus identifies a workload resource and its observed replica state.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"apiGroup": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIGroup is the group for the resource being referenced. If APIGroup is not specified, the specified Kind must be in the core API group. For any other third-party types, APIGroup is required.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is the type of resource being referenced",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name is the name of resource being referenced",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"readyReplicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ReadyReplicas is the number of pods available to serve traffic. Copied from the workload's status on each reconcile.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+				},
+				Required: []string{"kind", "name"},
+			},
+		},
+	}
+}
+
 func schema_pkg_apis_serving_v1beta1_OtelCollectorConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -10675,6 +12095,62 @@ func schema_pkg_apis_serving_v1beta1_PMMLSpec(ref common.ReferenceCallback) comm
 	}
 }
 
+func schema_pkg_apis_serving_v1beta1_PVCRefTierSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "PVCRefTierSpec mounts a pre-existing user-managed PVC as a KV cache tier.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name of the pre-existing PersistentVolumeClaim.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"path": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Path is a subdirectory within the PVC used as VolumeMount.subPath.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_PVCTierSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "PVCTierSpec configures a PVC-backed KV cache tier. Exactly one of Spec or Ref must be set.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Spec creates one ephemeral PVC per pod automatically. The PVC is owned by the pod and deleted when the pod is deleted — it does not survive pod restarts.",
+							Ref:         ref("k8s.io/api/core/v1.PersistentVolumeClaimSpec"),
+						},
+					},
+					"ref": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Ref mounts a pre-existing user-managed PVC as the disk cache. The PVC must already exist. For a cache shared across replicas, provision an RWX PVC; for per-pod persistent cache, provision a separate PVC per pod and reference it by name.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.PVCRefTierSpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.PVCRefTierSpec", "k8s.io/api/core/v1.PersistentVolumeClaimSpec"},
+	}
+}
+
 func schema_pkg_apis_serving_v1beta1_PaddleServerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -11013,6 +12489,61 @@ func schema_pkg_apis_serving_v1beta1_PaddleServerSpec(ref common.ReferenceCallba
 		},
 		Dependencies: []string{
 			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ConfidentialSpec", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.ModelStorageSpec", "k8s.io/api/core/v1.ContainerPort", "k8s.io/api/core/v1.ContainerResizePolicy", "k8s.io/api/core/v1.ContainerRestartRule", "k8s.io/api/core/v1.EnvFromSource", "k8s.io/api/core/v1.EnvVar", "k8s.io/api/core/v1.Lifecycle", "k8s.io/api/core/v1.Probe", "k8s.io/api/core/v1.ResourceRequirements", "k8s.io/api/core/v1.SecurityContext", "k8s.io/api/core/v1.VolumeDevice", "k8s.io/api/core/v1.VolumeMount"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_ParallelismSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "TracingSpec defines the distributed tracing configuration. When present (even as an empty object `{}`), tracing is enabled with sensible defaults. When omitted, no tracing instrumentation is injected.\n\nExample - Enable tracing with defaults:\n\n\ttracing: {}\n\nExample - Custom configuration:\n\n\ttracing:\n\t  exporterEndpoint: \"http://my-collector:4317\"\n\t  sampler: \"parentbased_traceidratio\"\n\t  samplerArg: \"0.1\"\n\t  exporter: \"otlp\"",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"tensor": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Tensor parallelism size.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"pipeline": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Pipeline parallelism size.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"data": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Data parallelism size.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"dataLocal": {
+						SchemaProps: spec.SchemaProps{
+							Description: "DataLocal data local parallelism size.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"dataRPCPort": {
+						SchemaProps: spec.SchemaProps{
+							Description: "DataRPCPort is the data parallelism RPC port.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"expert": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Expert enables expert parallelism.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
 	}
 }
 
@@ -12711,6 +14242,117 @@ func schema_pkg_apis_serving_v1beta1_RolloutSpec(ref common.ReferenceCallback) c
 	}
 }
 
+func schema_pkg_apis_serving_v1beta1_RolloutStrategy(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "RolloutStrategy configures the rolling update behavior for a workload. These settings apply to both Deployment and LeaderWorkerSet resources created by the controller.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"maxUnavailable": {
+						SchemaProps: spec.SchemaProps{
+							Description: "MaxUnavailable specifies the maximum number of replicas that can be unavailable during a rolling update. Value can be an absolute number (ex: 5) or a percentage of total replicas (ex: \"50%\"). Defaults to 25% for Deployments, 1 for LeaderWorkerSets when not set.",
+							Ref:         ref("k8s.io/apimachinery/pkg/util/intstr.IntOrString"),
+						},
+					},
+					"maxSurge": {
+						SchemaProps: spec.SchemaProps{
+							Description: "MaxSurge specifies the maximum number of replicas that can be scheduled above the desired number of replicas during a rolling update. Value can be an absolute number (ex: 5) or a percentage of total replicas (ex: \"50%\"). Defaults to 25% for Deployments, 0 for LeaderWorkerSets when not set.",
+							Ref:         ref("k8s.io/apimachinery/pkg/util/intstr.IntOrString"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/util/intstr.IntOrString"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_RouterSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "RouterSpec defines the routing configuration for exposing the service. It supports Kubernetes Ingress and the Gateway API. The fields are mutually exclusive.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"route": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Route configuration for the Gateway API. If an empty object `{}` is provided, the controller creates and manages a new HTTPRoute.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.GatewayRoutesSpec"),
+						},
+					},
+					"gateway": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Gateway configuration for the Gateway API, mutually exclusive with Ingress. If an empty object `{}` is provided, the controller uses a default Gateway. This must be used in conjunction with the 'Route' field for managed Gateway API resources.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.GatewaySpec"),
+						},
+					},
+					"ingress": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Ingress configuration. This is mutually exclusive with Route and Gateway. If an empty object `{}` is provided, the controller creates and manages a default Ingress resource.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.IngressSpec"),
+						},
+					},
+					"scheduler": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Scheduler configuration for the Inference Gateway extension. If this field is non-empty, an InferenceModel resource will be created to integrate with the gateway's scheduler.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.SchedulerSpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.GatewayRoutesSpec", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.GatewaySpec", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.IngressSpec", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.SchedulerSpec"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_RouterStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "RouterStatus records the networking resources observed during the last successful routing reconciliation. Nil when routing is not configured or the service is stopped.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"gateways": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-type": "atomic",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "Gateways lists the Gateway resources observed as attached to this service, each with the listeners and HTTPRoutes bound through them.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.ObservedGateway"),
+									},
+								},
+							},
+						},
+					},
+					"scheduler": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Scheduler records the observed scheduler topology. Nil when the scheduler is not configured.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.ObservedSchedulerStatus"),
+						},
+					},
+					"group": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Group reports the observed routing group topology. Nil when this LLMISVC is not part of a routing group.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.GroupStatus"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.GroupStatus", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.ObservedGateway", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.ObservedSchedulerStatus"},
+	}
+}
+
 func schema_pkg_apis_serving_v1beta1_SKLearnSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -13053,6 +14695,172 @@ func schema_pkg_apis_serving_v1beta1_SKLearnSpec(ref common.ReferenceCallback) c
 	}
 }
 
+func schema_pkg_apis_serving_v1beta1_ScalingSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ScalingSpec configures autoscaling for the LLM inference deployment. When scaling is configured, the controller creates and manages autoscaling resources (ServiceMonitor and the selected actuator — HPA or KEDA ScaledObject). Direct KEDA scaling uses user-defined triggers. The deprecated WVA fields are retained only so existing resources can be decoded during upgrades; new WVA configuration is rejected.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"minReplicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "MinReplicas is the minimum number of replicas for the deployment during active scaling. This is the scaling floor when triggers are active. For idle scale-down, use KEDA's idleReplicaCount instead. Defaults to 1 if not specified.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"maxReplicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "MaxReplicas is the maximum number of replicas for the deployment.",
+							Default:     0,
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"wva": {
+						SchemaProps: spec.SchemaProps{
+							Description: "WVA is deprecated and retained only for decoding existing resources during upgrades. Existing WVA configuration is not reconciled and new WVA configuration is rejected.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.WVASpec"),
+						},
+					},
+					"keda": {
+						SchemaProps: spec.SchemaProps{
+							Description: "KEDA configures direct KEDA scaling without WVA. Users specify their own triggers (CPU, Prometheus, queue depth, etc.) and the controller creates a ScaledObject with those triggers.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.DirectKEDAScalingSpec"),
+						},
+					},
+				},
+				Required: []string{"maxReplicas"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.DirectKEDAScalingSpec", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.WVASpec"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_SchedulerConfigSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"inline": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Inline EndpointPickerConfig",
+							Ref:         ref("k8s.io/apimachinery/pkg/runtime.RawExtension"),
+						},
+					},
+					"ref": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Ref is a reference to a ConfigMap key with EndpointPickerConfig.",
+							Ref:         ref("k8s.io/api/core/v1.ConfigMapKeySelector"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.ConfigMapKeySelector", "k8s.io/apimachinery/pkg/runtime.RawExtension"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_SchedulerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "SchedulerSpec defines the Inference Gateway extension configuration.\n\nThe SchedulerSpec configures the connection from the Gateway to the model deployment leveraging the LLM optimized request Scheduler, also known as the Endpoint Picker (EPP). The EPP determines the exact pod that should handle the request and responds back to the Gateway with the target pod. The Gateway will then forward the request to the chosen pod.\n\nThe Scheduler is only effective when having multiple inference pod replicas.\n\nStep 1 (endpoint selection): Gateway <-- ExtProc --> EPP (select the optimal replica to handle the request) Step 2 (endpoint routing): Gateway <-- forward request/response --> Inference Pod X",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"pool": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Pool configuration for the InferencePool, which is part of the Inference Gateway extension.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.InferencePoolSpec"),
+						},
+					},
+					"labels": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Labels that will be added to the scheduler component pod. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type:   []string{"string"},
+										Format: "",
+									},
+								},
+							},
+						},
+					},
+					"annotations": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Annotations that will be added to the scheduler component pod. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type:   []string{"string"},
+										Format: "",
+									},
+								},
+							},
+						},
+					},
+					"template": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Template for the Inference Gateway Extension pod spec. This configures the Endpoint Picker (EPP) Deployment.",
+							Ref:         ref("k8s.io/api/core/v1.PodSpec"),
+						},
+					},
+					"config": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Config is the configuration for the EndpointPicker.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.SchedulerConfigSpec"),
+						},
+					},
+					"replicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Replicas is the number of replicas for the scheduler.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"tokenizer": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Tokenizer provides optional operational overrides for the standalone tokenizer deployment that serves the vLLM render endpoint (/v1/completions/render) over HTTP. The tokenizer is auto-deployed when token-producer or precise-prefix-cache-scorer plugins are detected in the scheduler config.inline. Use this field to customize the tokenizer pod template (resources, image overrides, etc.).",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.TokenizerSpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.InferencePoolSpec", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.SchedulerConfigSpec", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.TokenizerSpec", "k8s.io/api/core/v1.PodSpec"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_SecondaryTierSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "SecondaryTierSpec defines one secondary KV cache tier. Exactly one field must be set.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"fileSystem": {
+						SchemaProps: spec.SchemaProps{
+							Description: "FileSystem configures a POSIX disk tier backed by a Kubernetes volume.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.FileSystemTierSpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.FileSystemTierSpec"},
+	}
+}
+
 func schema_pkg_apis_serving_v1beta1_SecurityConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -13082,6 +14890,85 @@ func schema_pkg_apis_serving_v1beta1_ServiceConfig(ref common.ReferenceCallback)
 					"serviceClusterIPNone": {
 						SchemaProps: spec.SchemaProps{
 							Description: "ServiceClusterIPNone is a boolean flag to indicate if the service should have a clusterIP set to None. If the DeploymentMode is Raw, the default value for ServiceClusterIPNone is false when the value is absent.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_SourcedAddress(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "SourcedAddress extends Addressable with the networking resource that produced this address, enabling consumers to select endpoints by origin.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name is the name of the address.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"url": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("knative.dev/pkg/apis.URL"),
+						},
+					},
+					"CACerts": {
+						SchemaProps: spec.SchemaProps{
+							Description: "CACerts is the Certification Authority (CA) certificates in PEM format according to https://www.rfc-editor.org/rfc/rfc7468.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"audience": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Audience is the OIDC audience for this address.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"origin": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Origin identifies the networking resource (e.g., Gateway) that produced this address. Nil when the origin is unknown or when the address was converted from an older API version.",
+							Ref:         ref("sigs.k8s.io/gateway-api/apis/v1.ObjectReference"),
+						},
+					},
+					"models": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.ModelSourcedAddressStatus"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ModelSourcedAddressStatus", "knative.dev/pkg/apis.URL", "sigs.k8s.io/gateway-api/apis/v1.ObjectReference"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_StorageInitializerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "StorageInitializerSpec defines the configuration for the storage initializer. The storage initializer is an initContainer responsible for downloading model artifacts from remote storage (s3://, hf://) before the main container starts.\n\nExample - Disable storage initializer:\n\n\tstorageInitializer:\n\t  enabled: false\n\nExample - Explicitly enable (same as default):\n\n\tstorageInitializer:\n\t  enabled: true",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"enabled": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Enabled controls whether the storage-initializer initContainer is created. When nil or true, storage-initializer is created for applicable URIs (s3://, hf://). When explicitly set to false, storage-initializer creation is skipped. This is useful when models are pre-loaded via alternative mechanisms (e.g., custom init containers, modelcars). Default: true (nil is treated as true for backward compatibility)",
 							Type:        []string{"boolean"},
 							Format:      "",
 						},
@@ -13501,6 +15388,27 @@ func schema_pkg_apis_serving_v1beta1_TFServingSpec(ref common.ReferenceCallback)
 		},
 		Dependencies: []string{
 			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ConfidentialSpec", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.ModelStorageSpec", "k8s.io/api/core/v1.ContainerPort", "k8s.io/api/core/v1.ContainerResizePolicy", "k8s.io/api/core/v1.ContainerRestartRule", "k8s.io/api/core/v1.EnvFromSource", "k8s.io/api/core/v1.EnvVar", "k8s.io/api/core/v1.Lifecycle", "k8s.io/api/core/v1.Probe", "k8s.io/api/core/v1.ResourceRequirements", "k8s.io/api/core/v1.SecurityContext", "k8s.io/api/core/v1.VolumeDevice", "k8s.io/api/core/v1.VolumeMount"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_TokenizerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "TokenizerSpec configures a standalone tokenizer deployment.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"template": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Template for the tokenizer pod spec. This is merged on top of the well-known tokenizer config defaults (vLLM render container).",
+							Ref:         ref("k8s.io/api/core/v1.PodSpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.PodSpec"},
 	}
 }
 
@@ -14836,6 +16744,65 @@ func schema_pkg_apis_serving_v1beta1_TritonSpec(ref common.ReferenceCallback) co
 	}
 }
 
+func schema_pkg_apis_serving_v1beta1_UntypedObjectReference(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "UntypedObjectReference is a reference to an object without a specific Group/Version/Kind. It's used for referencing networking resources like Ingresses where the exact type might be inferred or is not strictly required by this controller.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name of the referenced object.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"namespace": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Namespace of the referenced object.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_WVASpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "WVASpec is the deprecated Workload Variant Autoscaler configuration retained for upgrade compatibility. New WVA configuration is rejected and existing WVA configuration is not reconciled.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"variantCost": {
+						SchemaProps: spec.SchemaProps{
+							Description: "VariantCost specifies the cost per replica for this variant (used in saturation analysis).",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"hpa": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.HPAScalingSpec"),
+						},
+					},
+					"keda": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.KEDAScalingSpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.HPAScalingSpec", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.KEDAScalingSpec"},
+	}
+}
+
 func schema_pkg_apis_serving_v1beta1_WorkerSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -15325,6 +17292,133 @@ func schema_pkg_apis_serving_v1beta1_WorkerSpec(ref common.ReferenceCallback) co
 		},
 		Dependencies: []string{
 			"k8s.io/api/core/v1.Affinity", "k8s.io/api/core/v1.Container", "k8s.io/api/core/v1.EphemeralContainer", "k8s.io/api/core/v1.EvictionResponder", "k8s.io/api/core/v1.HostAlias", "k8s.io/api/core/v1.LocalObjectReference", "k8s.io/api/core/v1.PodDNSConfig", "k8s.io/api/core/v1.PodOS", "k8s.io/api/core/v1.PodReadinessGate", "k8s.io/api/core/v1.PodResourceClaim", "k8s.io/api/core/v1.PodSchedulingGate", "k8s.io/api/core/v1.PodSchedulingGroup", "k8s.io/api/core/v1.PodSecurityContext", "k8s.io/api/core/v1.ResourceRequirements", "k8s.io/api/core/v1.Toleration", "k8s.io/api/core/v1.TopologySpreadConstraint", "k8s.io/api/core/v1.Volume", "k8s.io/apimachinery/pkg/api/resource.Quantity"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_WorkloadSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "WorkloadSpec defines the configuration for a deployment workload, such as replicas and pod specifications.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"replicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Number of replicas for the deployment.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"scaling": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Scaling configuration for autoscaling this workload. When specified, the controller creates and manages autoscaling resources (ServiceMonitor and the selected actuator — HPA or KEDA ScaledObject) targeting this workload. Mutually exclusive with the static 'replicas' field. In a disaggregated setup, each workload (decode and prefill) can have its own independent scaling configuration, resulting in separate autoscaling resources per workload.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.ScalingSpec"),
+						},
+					},
+					"parallelism": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Parallelism configurations for the runtime, such as tensor and pipeline parallelism. These values are used to configure the underlying inference runtime (e.g., vLLM).",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.ParallelismSpec"),
+						},
+					},
+					"labels": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Labels that will be added to the component pod. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type:   []string{"string"},
+										Format: "",
+									},
+								},
+							},
+						},
+					},
+					"annotations": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Annotations that will be added to the component pod. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type:   []string{"string"},
+										Format: "",
+									},
+								},
+							},
+						},
+					},
+					"template": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Template for the main pod spec. In a multi-node deployment, this configures the \"head\" or \"master\" pod. In a disaggregated deployment, this configures the \"decode\" pod if it's the top-level template, or the \"prefill\" pod if it's within the Prefill block.\n\nFor the storage-initializer init container (named \"storage-initializer\"), users may customize fields such as env, resources, volumeMounts, and image. The container's name, args, and command are controller-managed and any user-provided values for these fields will be overridden. To disable the storage-initializer entirely, use spec.storageInitializer.enabled=false.",
+							Ref:         ref("k8s.io/api/core/v1.PodSpec"),
+						},
+					},
+					"worker": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Worker configuration for multi-node deployments. The presence of this field triggers the creation of a multi-node (distributed) setup. This spec defines the configuration for the worker pods, while the main 'Template' field defines the head pod. The controller is responsible for enabling discovery between head and worker pods.",
+							Ref:         ref("k8s.io/api/core/v1.PodSpec"),
+						},
+					},
+					"kvCacheOffloading": {
+						SchemaProps: spec.SchemaProps{
+							Description: "KVCacheOffloading configures multi-tier KV cache CPU offloading for this workload. The controller translates this into --kv-transfer-config for the vLLM serve command.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.KVCacheOffloadingSpec"),
+						},
+					},
+					"rolloutStrategy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "RolloutStrategy configures how rolling updates are performed for this workload. When omitted, Kubernetes/LWS defaults apply (maxUnavailable: 25%, maxSurge: 25% for Deployments; maxUnavailable: 1, maxSurge: 0 for LeaderWorkerSets).",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.RolloutStrategy"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.KVCacheOffloadingSpec", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.ParallelismSpec", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.RolloutStrategy", "github.com/kserve/kserve/pkg/apis/serving/v1beta1.ScalingSpec", "k8s.io/api/core/v1.PodSpec"},
+	}
+}
+
+func schema_pkg_apis_serving_v1beta1_WorkloadStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "WorkloadStatus records the workload resources observed during the last successful reconciliation. Nil when no workload resources have been created yet, or when the service is stopped.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"primary": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Primary is the main inference workload (Deployment or LeaderWorkerSet). When disaggregated serving is configured, this workload handles the decode phase; otherwise it handles both prefill and decode. A service on the DisaggregatedSet backend references its DisaggregatedSet here, with the ready replicas of the decode role.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.ObservedWorkloadStatus"),
+						},
+					},
+					"prefill": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Prefill is the prefill workload in disaggregated serving mode. Nil when disaggregated serving is not configured. A service on the DisaggregatedSet backend references the same DisaggregatedSet as Primary, with the ready replicas of the prefill role.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.ObservedWorkloadStatus"),
+						},
+					},
+					"service": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Service is the Kubernetes Service fronting the primary inference workload.",
+							Ref:         ref("k8s.io/api/core/v1.TypedLocalObjectReference"),
+						},
+					},
+					"scheduler": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Scheduler is the EPP scheduler Deployment. Nil when the scheduler is not configured.",
+							Ref:         ref("github.com/kserve/kserve/pkg/apis/serving/v1beta1.ObservedWorkloadStatus"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/kserve/kserve/pkg/apis/serving/v1beta1.ObservedWorkloadStatus", "k8s.io/api/core/v1.TypedLocalObjectReference"},
 	}
 }
 

@@ -107,28 +107,32 @@ pytest -m "llminferenceservice and (cluster_cpu or cluster_amd)" test/e2e/llmisv
 3. Add new cluster capability test cases using `pytest.param` with appropriate marks:
 
    ```python
-   pytest.param(
-       TestCase(["router-managed", "workload-nvidia-a100-gpu", "model-llama-70b"]),
-       marks=pytest.mark.cluster_nvidia,
-   ),
+   (
+       pytest.param(
+           TestCase(["router-managed", "workload-nvidia-a100-gpu", "model-llama-70b"]),
+           marks=pytest.mark.cluster_nvidia,
+       ),
+   )
    ```
 
    You can also customize test behavior with additional LlmDTestCase parameters:
 
    ```python
-   pytest.param(
-       TestCase(
-           base_refs=["router-managed", "workload-single-cpu", "model-fb-opt-125m"],
-           prompt="What is the capital of France?",
-           max_tokens=50,
-           response_assertion=lambda response: (
-               response.status_code == 200
-               and response.json().get("choices") is not None
-               and len(response.json().get("choices", [])) > 0
+   (
+       pytest.param(
+           TestCase(
+               base_refs=["router-managed", "workload-single-cpu", "model-fb-opt-125m"],
+               prompt="What is the capital of France?",
+               max_tokens=50,
+               response_assertion=lambda response: (
+                   response.status_code == 200
+                   and response.json().get("choices") is not None
+                   and len(response.json().get("choices", [])) > 0
+               ),
            ),
+           marks=pytest.mark.cluster_cpu,
        ),
-       marks=pytest.mark.cluster_cpu,
-   ),
+   )
    ```
 
 ## Config Naming Convention

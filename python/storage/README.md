@@ -68,13 +68,17 @@ model_dir = Storage.download("s3://bucket-name/model-path")
 ### Azure Blob Storage
 
 ```python
-model_dir = Storage.download("https://account-name.blob.core.windows.net/container-name/model-path")
+model_dir = Storage.download(
+    "https://account-name.blob.core.windows.net/container-name/model-path"
+)
 ```
 
 ### Azure File Share
 
 ```python
-model_dir = Storage.download("https://account-name.file.core.windows.net/share-name/model-path")
+model_dir = Storage.download(
+    "https://account-name.file.core.windows.net/share-name/model-path"
+)
 ```
 
 ### HTTP/HTTPS URLs
